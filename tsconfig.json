@@ -1,24 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
     "useDefineForClassFields": true,
-    "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
 
-    /* Linting */
-    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    "target": "ESNext", // Целевая версия JavaScript
+    "module": "ESNext", // Модульная система
+    "strict": true, // Включение строгого режима
+    "jsx": "preserve", // Поддержка JSX (если необходимо)
+    "esModuleInterop": true, // Совместимость с CommonJS
+    "skipLibCheck": true, // Пропуск проверки библиотек
+    "forceConsistentCasingInFileNames": true // Принудительное соблюдение регистра в именах файлов
+
   },
-  "include": ["src"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules"] // Исключение папки node_modules
 }
