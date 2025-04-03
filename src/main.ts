@@ -1,12 +1,16 @@
-import { setupCounter } from './counter.ts'
 import './style/main.sass'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <button class="sp-button">
-      text
-    </button>
-  </div>
-`
+import Handlebars from 'handlebars';
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+import templateBtn from './templates/btn.hbs';
+// Данные для рендеринга
+const data = {
+  text: 'Войти'
+};
+
+const template = Handlebars.compile(templateBtn);
+
+const html = template(data);
+
+document.body.innerHTML = html;
+

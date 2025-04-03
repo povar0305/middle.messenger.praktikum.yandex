@@ -12,5 +12,8 @@
     "sass": "^1.86.2",
     "typescript": "~5.7.2",
     "vite": "^6.2.0"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.8"
   }
 }
