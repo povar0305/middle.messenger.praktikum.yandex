@@ -4,10 +4,18 @@ import { resolve } from "path";
 
 export default defineConfig({
   base: '/',
+  build: {
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        login: 'login.html',
+      },
+    },
+  },
   plugins: [
     handlebars({
       partialDirectory: resolve(__dirname, 'src/partials')
     }),
   ],
-  assetsInclude: ['**/*.html'], // Добавьте эту строку для обработки HTML файлов
+  assetsInclude: ['**/*.hbs']
 })
