@@ -42,7 +42,7 @@ body{
   justify-content: center;
 
   &--small {
-    box-shadow: 0px 0 6px 0px #00000024;
+    box-shadow: 0 0 6px 0 #00000024;
     min-width: 340px;
     padding: 1.5rem;
     border-radius: 0.75rem;
@@ -67,11 +67,11 @@ body{
     all: unset;
     box-sizing: border-box;
     width: 100%;
-    padding: 10px;
+    padding: 8px 12px;
     border-bottom: 1px solid $primary-bg;
-    font-family: inherit;
-    font-size: inherit;
+    font-size: 0.83rem;
     color: $text-color;
+    transition: 200ms;
 
     &::placeholder {
       color: $secondary-text-color;
@@ -82,5 +82,24 @@ body{
       outline: none;
       border-color: $secondary-color;
     }
+  }
+}
+
+.sp-link {
+  color: $primary-color;
+  font-size: 0.83rem;
+  width: fit-content;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: 200ms;
+
+  &--center {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  &:hover {
+    color: $secondary-color;
+    border-bottom: 1px solid $secondary-color;
   }
 }
