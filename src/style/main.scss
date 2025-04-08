@@ -8,12 +8,23 @@ body{
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
+  margin: 0;
 }
 
 .sp-header {
   color: $text-color;
   font-size: 1.25rem;
   &--center{
+    text-align: center;
+  }
+}
+
+h1 {
+  color: $text-color;
+  font-size: 2.25rem;
+  width: auto;
+
+  &.center{
     text-align: center;
   }
 }
@@ -101,5 +112,25 @@ body{
   &:hover {
     color: $secondary-color;
     border-bottom: 1px solid $secondary-color;
+  }
+}
+
+.sp-error {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &--wrapper {
+    width: auto;
+    display: flex;
+    gap: 4rem;
+    flex-direction: column;
+  }
+  &--group {
+    width: auto;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
   }
 }
