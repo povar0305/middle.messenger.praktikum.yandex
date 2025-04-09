@@ -7,11 +7,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: 'index.html',
+        index: 'index.html',
         login: 'login.html',
         signin: 'signin.html',
         404: '404.html',
         500: '500.html',
+        profile: 'profile.html'
       },
     },
   },

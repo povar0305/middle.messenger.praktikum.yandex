@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables';
 
 body{
   margin: 0;
@@ -12,7 +12,7 @@ body{
 }
 
 .sp-header {
-  color: $text-color;
+  color: variables.$text-color;
   font-size: 1.25rem;
   &--center{
     text-align: center;
@@ -20,7 +20,7 @@ body{
 }
 
 h1 {
-  color: $text-color;
+  color: variables.$text-color;
   font-size: 2.25rem;
   width: auto;
 
@@ -30,7 +30,7 @@ h1 {
 }
 
 .sp-button {
-  background: $primary-color;
+  background: variables.$primary-color;
   padding: 0.75rem;
   height: auto;
   border: none;
@@ -41,7 +41,7 @@ h1 {
   border-radius: 0.5rem;
   transition: 200ms;
   &:hover {
-    background: $secondary-color;
+    background: variables.$secondary-color;
   }
 }
 
@@ -65,6 +65,15 @@ h1 {
     gap: 4rem;
   }
 
+  &--main {
+    overflow: auto;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+
   &--group {
     display: flex;
     flex-direction: column;
@@ -79,25 +88,25 @@ h1 {
     box-sizing: border-box;
     width: 100%;
     padding: 8px 12px;
-    border-bottom: 1px solid $primary-bg;
+    border-bottom: 1px solid variables.$primary-bg;
     font-size: 0.83rem;
-    color: $text-color;
+    color: variables.$text-color;
     transition: 200ms;
 
     &::placeholder {
-      color: $secondary-text-color;
+      color: variables.$secondary-text-color;
       opacity: 1;
     }
 
     &:focus, &:hover {
       outline: none;
-      border-color: $secondary-color;
+      border-color: variables.$secondary-color;
     }
   }
 }
 
 .sp-link {
-  color: $primary-color;
+  color: variables.$primary-color;
   font-size: 0.83rem;
   width: fit-content;
   text-decoration: none;
@@ -110,8 +119,17 @@ h1 {
   }
 
   &:hover {
-    color: $secondary-color;
-    border-bottom: 1px solid $secondary-color;
+    color: variables.$secondary-color;
+    border-bottom: 1px solid variables.$secondary-color;
+  }
+
+  &--error {
+    color: variables.$error-color;
+
+    &:hover{
+      color: variables.$error-color--hover;
+      border-bottom: 1px solid variables.$error-color--hover;
+    }
   }
 }
 
@@ -127,10 +145,80 @@ h1 {
     gap: 4rem;
     flex-direction: column;
   }
+
   &--group {
     width: auto;
     display: flex;
     gap: 1rem;
     flex-direction: column;
+  }
+}
+
+.sp-navigate {
+  position: absolute;
+  padding: 0.5rem;
+  border-radius: 999px;
+  background: variables.$primary-color;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+
+  & svg {
+    transition: 200ms;
+    fill: variables.$white-color;
+  }
+
+  &:hover {
+    background: variables.$secondary-color;
+  }
+}
+
+.sp-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  max-width: 340px;
+  margin: 0 auto;
+  justify-content: center;
+  height: 100%;
+
+  &_group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &_avatar {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+
+    & svg {
+      cursor: pointer;
+      fill: variables.$primary-bg;
+      width: 80px;
+      height: 80px;
+      transition: 200ms;
+
+      &:hover {
+      fill: variables.$secondary-bg;
+      }
+    }
+  }
+
+  &_setting {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+
+    & p {
+      color: variables.$text-color
+    }
+
+    & span {
+      color: variables.$secondary-text-color
+    }
   }
 }
