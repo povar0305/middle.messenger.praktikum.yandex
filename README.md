@@ -6,7 +6,7 @@
 ## Текущий статус
 В данной ветке хранится результат работы 1го спринта с [курса](https://practicum.yandex.ru/profile/middle-frontend/)
 
-В рамках данного спринта необходимо было собрать основные страницы(авторизация, регистрация, страница пользвоателя, 404, 500 и заглушка для страницы чата), настроить eslint, vite. Для стилей я выбрала sass.
+В рамках данного спринта необходимо было собрать основные страницы([авторизация](https://sonyaqwerty.netlify.app/login), [регистрация](https://sonyaqwerty.netlify.app/signin), [страница пользвоателя](https://sonyaqwerty.netlify.app/profile), [404](https://sonyaqwerty.netlify.app/404), [500](https://sonyaqwerty.netlify.app/500) и [заглушка для страницы чата](https://sonyaqwerty.netlify.app/chants)), настроить eslint, vite. Для стилей я выбрала sass.
 
 ## Установка и запуск
 
