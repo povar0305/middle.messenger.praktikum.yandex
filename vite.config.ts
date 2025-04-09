@@ -12,7 +12,8 @@ export default defineConfig({
         signin: 'signin.html',
         404: '404.html',
         500: '500.html',
-        profile: 'profile.html'
+        profile: 'profile.html',
+        chats: 'chats.html'
       },
     },
   },
