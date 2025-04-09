@@ -3,11 +3,65 @@
   {{> head title="Главная"}}
 
   <body>
-    <nav class="">
-      <a href="/authorization">authorization</a>
-    </nav>
+    <main>
+      <nav class="sp-wrapper">
+        <ul>
+          <li>
+            {{>
+              link
+              text="Авторизация"
+              href="/login"
+              class="sp-link--center"
+            }}
+          </li>
 
-      {{> btn text="Войти"}}
+          <li>
+            {{>
+              link
+              text="Регистрация"
+              href="/signin"
+              class="sp-link--center"
+            }}
+          </li>
+
+          <li>
+            {{>
+              link
+              text="404"
+              href="/404"
+              class="sp-link--center"
+            }}
+          </li>
+
+          <li>
+            {{>
+              link
+              text="500"
+              href="/500"
+              class="sp-link--center"
+            }}
+          </li>
+
+          <li>
+            {{>
+              link
+              text="Профиль"
+              href="/profile"
+              class="sp-link--center"
+            }}
+          </li>
+
+          <li>
+            {{>
+              link
+              text="Чат-заглушка"
+              href="/chats"
+              class="sp-link--center"
+            }}
+          </li>
+        </ul>
+      </nav>
+    </main>
 
     <script src="./src/main.ts" type="module"></script>
   </body>

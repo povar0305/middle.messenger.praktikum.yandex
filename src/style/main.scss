@@ -222,3 +222,20 @@ h1 {
     }
   }
 }
+
+nav {
+  display: flex;
+  max-width: 340px;
+  margin: 0 auto;
+
+  ul {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    list-style: none;
+
+    li {
+
+    }
+  }
+}
