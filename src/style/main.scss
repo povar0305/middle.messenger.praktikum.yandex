@@ -203,7 +203,7 @@ h1 {
       transition: 200ms;
 
       &:hover {
-      fill: variables.$secondary-bg;
+        fill: variables.$secondary-bg;
       }
     }
   }
@@ -212,6 +212,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     font-size: 1rem;
+    align-items: center;
 
     & p {
       color: variables.$text-color

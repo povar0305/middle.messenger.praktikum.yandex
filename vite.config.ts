@@ -1,6 +1,6 @@
-import { defineConfig } from "vite";
+import { defineConfig } from 'vite';
 import handlebars from 'vite-plugin-handlebars';
-import { resolve } from "path";
+import { resolve } from 'path';
 
 export default defineConfig({
   base: '/',
@@ -13,14 +13,15 @@ export default defineConfig({
         404: '404.html',
         500: '500.html',
         profile: 'profile.html',
-        chats: 'chats.html'
+        'update-profile': 'update-profile.html',
+        chats: 'chats.html',
       },
     },
   },
   plugins: [
     handlebars({
-      partialDirectory: resolve(__dirname, 'src/partials')
+      partialDirectory: resolve(__dirname, 'src/partials'),
     }),
   ],
-  assetsInclude: ['**/*.hbs']
-})
+  assetsInclude: ['**/*.hbs'],
+});

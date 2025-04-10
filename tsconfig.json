@@ -7,20 +7,17 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-
-    "target": "ESNext", // Целевая версия JavaScript
-    "module": "ESNext", // Модульная система
-    "strict": true, // Включение строгого режима
-    "jsx": "preserve", // Поддержка JSX (если необходимо)
-    "esModuleInterop": true, // Совместимость с CommonJS
-    "skipLibCheck": true, // Пропуск проверки библиотек
-    "forceConsistentCasingInFileNames": true // Принудительное соблюдение регистра в именах файлов
-
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"] // Исключение папки node_modules
