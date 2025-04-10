@@ -20,12 +20,12 @@
     "eslint-plugin-import": "^2.31.0",
     "postcss": "^8.5.3",
     "sass": "^1.86.3",
-    "typescript": "~5.7.2",
-    "vite": "6.2.5"
+    "typescript": "~5.7.2"
   },
   "dependencies": {
     "globals": "^16.0.0",
     "handlebars": "^4.7.8",
+    "vite": "6.2.5",
     "vite-plugin-handlebars": "1.0.3",
     "typescript-eslint": "^8.29.1"
   }
