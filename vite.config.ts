@@ -13,6 +13,7 @@ export default defineConfig({
         404: '404.html',
         500: '500.html',
         profile: 'profile.html',
+        'update-profile': 'update-profile.html',
         chats: 'chats.html',
       },
     },
