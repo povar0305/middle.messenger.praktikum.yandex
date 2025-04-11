@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+  {{> head title="Главная"}}
+
+  <body>
+    <main>
+      <nav class="sp-wrapper">
+        <ul>
+          <li>
+            {{>
+              link
+              text="Авторизация"
+              href="/login"
+              class="sp-link--center"
+            }}
+          </li>
+
+          <li>
+            {{>
+              link
+              text="Регистрация"
+              href="/signin"
+              class="sp-link--center"
+            }}
+          </li>
+
+          <li>
+            {{>
+              link
+              text="404"
+              href="/404"
+              class="sp-link--center"
+            }}
+          </li>
+
+          <li>
+            {{>
+              link
+              text="500"
+              href="/500"
+              class="sp-link--center"
+            }}
+          </li>
+
+          <li>
+            {{>
+              link
+              text="Профиль"
+              href="/profile"
+              class="sp-link--center"
+            }}
+          </li>
+
+          <li>
+            {{>
+              link
+              text="Обновление профиля"
+              href="/update-profile"
+              class="sp-link--center"
+            }}
+          </li>
+
+          <li>
+            {{>
+              link
+              text="Чат-заглушка"
+              href="/chats"
+              class="sp-link--center"
+            }}
+          </li>
+        </ul>
+      </nav>
+    </main>
+  </body>
+</html>
