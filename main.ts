@@ -102,7 +102,46 @@ switch (window.location.pathname) {
     break;
 
   case '/404':
+    const contentError404 = new ErrorBlock(
+      'div',
+      {
+        error: '404',
+        description: 'Упс, что-то пошло не так',
+        link: homeLink
+      }
+    )
 
+    const errorTpl404 = new Error(
+      'div',
+      {
+        content: contentError404
+      }
+    )
+
+    renderDom('#app', errorTpl404)
+    break;
+
+  case '/500':
+    const contentError500 = new ErrorBlock(
+      'div',
+      {
+        error: '500',
+        description: 'Что-то на сервере',
+        link: homeLink
+      }
+    )
+
+    const errorTpl500 = new Error(
+      'div',
+      {
+        content: contentError500
+      }
+    )
+
+    renderDom('#app', errorTpl500)
+    break;
+
+  default:
     const contentError = new ErrorBlock(
       'div',
       {
@@ -120,8 +159,5 @@ switch (window.location.pathname) {
     )
 
     renderDom('#app', errorTpl)
-    break;
-
-  default:
     break;
 }
