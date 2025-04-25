@@ -12,12 +12,7 @@ const tpl = `
     </div>
 
 
-    {{>
-      link
-      text="Назад"
-      href="/"
-      class="sp-link--center"
-    }}
+    {{{link}}}
   </div>
 </div>
 `;

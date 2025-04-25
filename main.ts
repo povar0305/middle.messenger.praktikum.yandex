@@ -1,95 +1,127 @@
 import renderDom from "./services/render";
 import Link from "./src/components/link";
 import Base from "./src/layouts/base";
-// index: 'index.html',
-//   login: 'login.html',
-//   signin: 'signin.html',
-//   404: '404.html',
-//   500: '500.html',
-//   profile: 'profile.html',
-//   'update-profile': 'update-profile.html',
-//   chats: 'chats.html',
 
+import Error from "./src/layouts/error";
+import ErrorBlock from './src/components/error'
 
-const linkLogin = new Link(
+console.log(window.location.pathname)
+const homeLink = new Link(
   'div', {
     attrs: {
       class: 'sp-link'
     },
-    text: 'Авторизация',
-    href: 'login'
+    text: 'Назад',
+    href: '/'
   }
 )
 
-const linkSignin = new Link(
-  'div', {
-    attrs: {
-      class: 'sp-link'
-    },
-    text: 'Регистрация',
-    href: 'signin'
-  }
-)
+switch (window.location.pathname) {
+  case '/':
+    const linkLogin = new Link(
+    'div', {
+      attrs: {
+        class: 'sp-link'
+      },
+      text: 'Авторизация',
+      href: 'login'
+    }
+  )
 
-const link404 = new Link(
-  'div', {
-    attrs: {
-      class: 'sp-link'
-    },
-    text: '404',
-    href: '404'
-  }
-)
+    const linkSignin = new Link(
+      'div', {
+        attrs: {
+          class: 'sp-link'
+        },
+        text: 'Регистрация',
+        href: 'signin'
+      }
+    )
 
-const link500 = new Link(
-  'div', {
-    attrs: {
-      class: 'sp-link'
-    },
-    text: '500',
-    href: '500'
-  }
-)
+    const link404 = new Link(
+      'div', {
+        attrs: {
+          class: 'sp-link'
+        },
+        text: '404',
+        href: '404'
+      }
+    )
 
-const linkProfile = new Link(
-  'div', {
-    attrs: {
-      class: 'sp-link'
-    },
-    text: 'Профиль',
-    href: 'profile'
-  }
-)
+    const link500 = new Link(
+      'div', {
+        attrs: {
+          class: 'sp-link'
+        },
+        text: '500',
+        href: '500'
+      }
+    )
 
-const linkUpdateProfile = new Link(
-  'div', {
-    attrs: {
-      class: 'sp-link'
-    },
-    text: 'Изменение профиля',
-    href: 'update-profile'
-  }
-)
+    const linkProfile = new Link(
+      'div', {
+        attrs: {
+          class: 'sp-link'
+        },
+        text: 'Профиль',
+        href: 'profile'
+      }
+    )
 
-const linkChats = new Link(
-  'div', {
-    attrs: {
-      class: 'sp-link'
-    },
-    text: 'Чаты',
-    href: 'chats'
-  }
-)
+    const linkUpdateProfile = new Link(
+      'div', {
+        attrs: {
+          class: 'sp-link'
+        },
+        text: 'Изменение профиля',
+        href: 'update-profile'
+      }
+    )
 
-const baseTpl = new Base(
-  'div',
-  {
-    attrs: {
-      class: 'sp-link'
-    },
-    inner: [linkLogin, linkSignin, link404, link500, linkProfile, linkUpdateProfile, linkChats]
-  }
-)
-// console.log('baseTpl',baseTpl)
+    const linkChats = new Link(
+      'div', {
+        attrs: {
+          class: 'sp-link'
+        },
+        text: 'Чаты',
+        href: 'chats'
+      }
+    )
 
-renderDom('#app', baseTpl)
+    const baseTpl = new Base(
+      'div',
+      {
+        attrs: {
+          class: 'sp-link'
+        },
+        inner: [linkLogin, linkSignin, link404, link500, linkProfile, linkUpdateProfile, linkChats]
+      }
+    )
+
+    renderDom('#app', baseTpl)
+    break;
+
+  case '/404':
+
+    const contentError = new ErrorBlock(
+      'div',
+      {
+        error: '404',
+        description: 'Упс, что-то пошло не так',
+        link: homeLink
+      }
+    )
+
+    const errorTpl = new Error(
+      'div',
+      {
+        content: contentError
+      }
+    )
+
+    renderDom('#app', errorTpl)
+    break;
+
+  default:
+    break;
+}
