@@ -1,3 +1,4 @@
+const tpl = `
 <div class="sp-error">
   <div class="sp-error--wrapper">
     <div class="sp-error--group">
@@ -19,3 +20,6 @@
     }}
   </div>
 </div>
+`;
+
+export default tpl;

@@ -1,3 +1,4 @@
+const tpl = `
 <div class="sp-input">
   <input
     class="sp-input_input"
@@ -6,4 +7,6 @@
     placeholder="{{placeholder}}"
     required="{{required}}"
   >
-</div>
+</div>`;
+
+export default tpl;
