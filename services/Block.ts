@@ -1,5 +1,5 @@
 import EventBus from "./EventBus";
-import Handlebars, {log} from 'handlebars';
+import Handlebars from 'handlebars';
 import {v4 as uuidv4} from 'uuid';
 
 type EventBusType = {
@@ -7,8 +7,7 @@ type EventBusType = {
   emit: (event: string, ...args: unknown[]) => void;
 };
 
-export type BlockProps = Record<string | symbol, never>;
-type Ref = Record<string | symbol, Element | Block>;
+export type BlockProps = Record<string | symbol, undefined>;
 
 // Определяем интерфейсы для возвращаемого объекта
 interface ParsedProps {
@@ -40,13 +39,13 @@ class Block {
   private _id: any;
   private lists: BlockProps;
 
-  constructor(tagName = "div", propsAndChild: BlockProps = {}) {
+  constructor(tagName = "div", propsAndChild?: { content: Link[] }) {
     this.eventBus = new EventBus();
     this._id = uuidv4()
 
     const { children, props, lists} = this.getChildren(propsAndChild)
     console.log('children',children)
-    this.attrs = propsAndChild.attrs
+    this.attrs = propsAndChild?.attrs || {}
 
     this._meta = {
       tagName,
@@ -66,16 +65,17 @@ class Block {
     const children: { [key: string]: Block } = {};
     const props: { [key: string]: object } = {};
 
-
-    Object.keys(anyProps).forEach((key) => {
-      if (anyProps[key] instanceof Block) {
-        children[key] = anyProps[key]
-      } else if(Array.isArray(anyProps[key])){
-        lists[key] = anyProps[key]
-      }else {
-        props[key] = anyProps[key]
-      }
-    })
+    if (anyProps) {
+      Object.keys(anyProps).forEach((key) => {
+        if (anyProps[key] instanceof Block) {
+          children[key] = anyProps[key]
+        } else if (Array.isArray(anyProps[key])) {
+          lists[key] = anyProps[key]
+        } else {
+          props[key] = anyProps[key]
+        }
+      })
+    }
     return {children, props, lists }
   }
   private _registerEvents(eventBus: EventBusType): void {
