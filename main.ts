@@ -3,6 +3,7 @@ import renderDom from "./services/render";
 import Base from "./src/layouts/base";
 import User from "./src/layouts/user";
 import Error from "./src/layouts/error";
+import Login from "./src/layouts/login";
 
 import Link from "./src/components/link";
 import ErrorBlock from './src/components/error'
@@ -12,6 +13,7 @@ import UpdateProfile from "./src/components/update-profile";
 import Setting from "./src/components/profile-setting";
 import Input from './src/components/input'
 import Btn from './src/components/btn'
+import Header from './src/components/header';
 
 console.log(window.location.pathname)
 
@@ -293,6 +295,49 @@ switch (window.location.pathname) {
     renderDom('#app', profileTpl)
   }
     break;
+
+  case '/login': {
+
+    const loginTpl = new Login(
+      'div',
+      {
+        header: new Header(
+          'div',
+          {
+            text: 'Войти',
+            class: 'sp-header--center'
+          }
+        ),
+        form: [
+          new Input(
+            'div',
+            {
+              type: 'text',
+              name: 'login',
+              placeholder: 'Логин'
+            }
+          ),
+          new Input(
+            'div',
+            {
+              type: 'password',
+              name: 'password',
+              placeholder: 'Пароль'
+            }
+          )
+        ],
+        action: new Btn(
+          'div',
+          {
+            text: 'Войти',
+            type: 'submit'
+          }
+        ),
+      }
+    )
+    renderDom('#app', loginTpl)
+  }
+  break;
 
   default: {
     const errorTpl = new Error(
