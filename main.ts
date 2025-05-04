@@ -297,7 +297,6 @@ switch (window.location.pathname) {
     break;
 
   case '/login': {
-
     const loginTpl = new Login(
       'div',
       {
@@ -326,18 +325,112 @@ switch (window.location.pathname) {
             }
           )
         ],
-        action: new Btn(
+        action: [
+          new Btn(
           'div',
           {
             text: 'Войти',
             type: 'submit'
           }
         ),
+          new Link(
+            'div', {
+              attrs: {
+                class: 'sp-link'
+              },
+              text: 'Зарегистрироваться',
+              href: '/signin'
+            }
+          )],
       }
     )
     renderDom('#app', loginTpl)
   }
   break;
+
+  case '/signin': {
+    const loginTpl = new Login(
+      'div',
+      {
+        header: new Header(
+          'div',
+          {
+            text: 'Регистрация',
+            class: 'sp-header--center'
+          }
+        ),
+        form: [
+          new Input(
+            'div',
+            {
+              type: 'text',
+              name: 'first_name',
+              placeholder: 'Имя'
+            }
+          ),
+          new Input(
+            'div',
+            {
+              type: 'text',
+              name: 'second_name',
+              placeholder: 'Фамилия'
+            }
+          ),
+          new Input(
+            'div',
+            {
+              type: 'text',
+              name: 'login',
+              placeholder: 'Логин'
+            }
+          ),
+          new Input(
+            'div',
+            {
+              type: 'text',
+              name: 'email',
+              placeholder: 'Почта'
+            }
+          ),
+          new Input(
+            'div',
+            {
+              type: 'password',
+              name: 'password',
+              placeholder: 'Пароль'
+            }
+          ),
+          new Input(
+            'div',
+            {
+              type: 'text',
+              name: 'phone',
+              placeholder: 'Номер телефона'
+            }
+          )
+        ],
+        action: [
+          new Btn(
+          'div',
+          {
+            text: 'Зарегистрироваться',
+            type: 'submit'
+          }),
+          new Link(
+            'div', {
+              attrs: {
+                class: 'sp-link'
+              },
+              text: 'Войти',
+              href: '/login'
+            }
+          )
+        ]
+      }
+    )
+    renderDom('#app', loginTpl)
+  }
+    break;
 
   default: {
     const errorTpl = new Error(
