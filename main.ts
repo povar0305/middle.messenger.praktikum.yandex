@@ -4,6 +4,7 @@ import Base from "./src/layouts/base";
 import User from "./src/layouts/user";
 import Error from "./src/layouts/error";
 import Login from "./src/layouts/login";
+import Chats from "./src/layouts/chats";
 
 import Link from "./src/components/link";
 import ErrorBlock from './src/components/error'
@@ -14,6 +15,7 @@ import Setting from "./src/components/profile-setting";
 import Input from './src/components/input'
 import Btn from './src/components/btn'
 import Header from './src/components/header';
+import UserChat from "./src/components/user-chat";
 
 console.log(window.location.pathname)
 
@@ -332,7 +334,7 @@ switch (window.location.pathname) {
             text: 'Войти',
             type: 'submit'
           }
-        ),
+          ),
           new Link(
             'div', {
               attrs: {
@@ -341,7 +343,8 @@ switch (window.location.pathname) {
               text: 'Зарегистрироваться',
               href: '/signin'
             }
-          )],
+          )
+        ],
       }
     )
     renderDom('#app', loginTpl)
@@ -431,6 +434,107 @@ switch (window.location.pathname) {
     renderDom('#app', loginTpl)
   }
     break;
+
+  case '/chats': {
+    const chatsTpl = new Chats(
+      'div',
+      {
+        list: [
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        }),
+          new UserChat('div', {
+            date: '10:20',
+            message: 'wertj',
+            name: 'testName'
+        })
+        ],
+        action: [
+          new Link(
+            'div',{
+              attrs: {
+                class: 'sp-link'
+              },
+              text: 'Профиль',
+              href: '/profile'
+            }
+          ),
+          new Input(
+            'div',
+            {
+              type: 'text',
+              name: 'search',
+              placeholder: 'Поиск'
+            }
+          )
+        ]
+      })
+
+    renderDom('#app', chatsTpl)
+  }
+  break;
 
   default: {
     const errorTpl = new Error(
