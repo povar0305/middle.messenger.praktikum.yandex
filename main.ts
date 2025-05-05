@@ -17,8 +17,6 @@ import Btn from './src/components/btn'
 import Header from './src/components/header';
 import UserChat from "./src/components/user-chat";
 
-console.log(window.location.pathname)
-
 const homeLink = new Link(
   'div', {
     attrs: {
