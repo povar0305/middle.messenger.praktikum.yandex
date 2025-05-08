@@ -279,7 +279,7 @@ switch (window.location.pathname) {
           'div',
           {
             text: 'Сохранить',
-            type: 'sumbut'
+            type: 'submit'
           }
         )
       }
@@ -300,6 +300,20 @@ switch (window.location.pathname) {
     const loginTpl = new Login(
       'div',
       {
+        events: {
+          submit: function (event) {
+            event.preventDefault()
+            const { elements } = event.target as HTMLFormElement;
+
+            const fields = Array.from(elements).filter((el) => el.nodeName === 'INPUT');
+            const formData = fields.reduce((acc: Record<string, string>, field: HTMLInputElement) => {
+              acc[field.name] = field.value;
+              return acc;
+            }, {});
+
+            console.log('Отправлена форма авторизации.', formData);
+          },
+        },
         header: new Header(
           'div',
           {
@@ -321,7 +335,13 @@ switch (window.location.pathname) {
             {
               type: 'password',
               name: 'password',
-              placeholder: 'Пароль'
+              placeholder: 'Пароль',
+              events: {
+                  blur: (el) => {
+                    el.preventDefault()
+                    console.log('blur:', el)
+                  }
+              }
             }
           )
         ],
@@ -343,7 +363,7 @@ switch (window.location.pathname) {
             }
           )
         ],
-      }
+      },
     )
     renderDom('#app', loginTpl)
   }
@@ -353,6 +373,20 @@ switch (window.location.pathname) {
     const loginTpl = new Login(
       'div',
       {
+        events: {
+          submit: function (event) {
+            event.preventDefault()
+            const {elements} = event.target as HTMLFormElement;
+
+            const fields = Array.from(elements).filter((el) => el.nodeName === 'INPUT');
+            const formData = fields.reduce((acc: Record<string, string>, field: HTMLInputElement) => {
+              acc[field.name] = field.value;
+              return acc;
+            }, {});
+
+            console.log('Отправлена форма регистрации.', formData);
+          },
+        },
         header: new Header(
           'div',
           {

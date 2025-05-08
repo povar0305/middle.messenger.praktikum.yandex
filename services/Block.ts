@@ -13,11 +13,12 @@ interface ParsedProps {
   children: { [key: string]: Block[]|Block };
   props: { [key: string]: never }; // Здесь можно уточнить типы, если известны
   lists: { [key: string]: never }; // Изменено на массив Block для списков
+  events: { [key: string]: () => void };
   [key: string]: Block|boolean|string|never[]|object
 }
 
 interface AnyProps {
-  [key: string]: Block|boolean|string|[]|object|Block[];
+  [key: string]: Block|boolean|string|[]|object|Block[]|never|void;
 }
 
 class Block {
@@ -97,7 +98,7 @@ class Block {
     if (typeof context === 'undefined') {
       context = this.props;
     }
-
+    console.log('context',context)
     const contextAndStubs = { ...context };
 
     const fragment = document.createElement('template');
@@ -150,7 +151,7 @@ class Block {
   }
 
   componentDidMount(oldProps?: BlockProps): void {
-    console.log(oldProps)
+    console.log('componentDidMount',oldProps)
   }
 
   dispatchComponentDidMount(): void {
@@ -178,9 +179,9 @@ class Block {
 
   private _render(): void {
     const block = this.render();
-    if (this._element) {
-      this._element.innerHTML = block;
-    }
+    this.removeEvents()
+    this.addEvents()
+    this._element.innerHTML = block;
   }
 
   protected render(): string {
@@ -188,7 +189,7 @@ class Block {
   }
 
   getContent(): HTMLElement | null {
-    return this.element;
+    return this._element;
   }
 
   private _makePropsProxy(props: BlockProps): BlockProps {
@@ -219,6 +220,23 @@ class Block {
   hide(): void {
     if (this.getContent()) {
       this.getContent()!.style.display = "none";
+    }
+  }
+
+  addEvents() {
+    if(this.props?.events && this.element) {
+      console.log(this.element)
+      Object.keys(this.props?.events).forEach((eventName) => {
+        this.element?.addEventListener(eventName, this.props?.events[eventName])
+      })
+    }
+  }
+
+  removeEvents() {
+    if(this.props?.events && this.element) {
+      Object.keys(this.props?.events).forEach((eventName) => {
+        this.element?.removeEventListener(eventName, this.props?.events[eventName])
+      })
     }
   }
 }
