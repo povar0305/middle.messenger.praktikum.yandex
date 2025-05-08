@@ -23,7 +23,7 @@ interface AnyProps {
 
 class Block {
   private children: AnyProps;
-  private _element: HTMLElement | null = null;
+  private _element: HTMLElement;
   private _meta: { tagName: string; props: BlockProps } | null = null;
   private eventBus: EventBusType;
 
@@ -38,6 +38,7 @@ class Block {
     FLOW_RENDER: "flow:render",
     EVENT_FLOW_CDU: 'flow:component-did-update'
   };
+  private attrs: null | object;
 
   constructor(tagName = "div", propsAndChild?: AnyProps) {
     this.eventBus = new EventBus();
@@ -52,6 +53,7 @@ class Block {
     this.props = this._makePropsProxy({ ...props, _id: this._id });
     this.children = this._makePropsProxy({ ...children });
     this.lists = this._makePropsProxy({ ...lists });
+    this.attrs = this.props?.attrs || {};
 
     this._registerEvents(this.eventBus);
     this.eventBus.emit(Block.EVENTS.INIT);
@@ -98,7 +100,7 @@ class Block {
     if (typeof context === 'undefined') {
       context = this.props;
     }
-    console.log('context',context)
+
     const contextAndStubs = { ...context };
 
     Object.keys(this.children).forEach((key) => {
@@ -111,7 +113,7 @@ class Block {
 
     const fragment = document.createElement('template');
     fragment.innerHTML = Handlebars.compile(template)(contextAndStubs);
-    console.log('fragment',fragment)
+
     Object.values(this.children).forEach((child) => {
       if (child instanceof Block) {
         const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
@@ -179,8 +181,8 @@ class Block {
     }
   }
 
-  get element(): HTMLElement | null {
-    return this._element;
+  get element(): HTMLElement {
+    return <HTMLElement>this._element;
   }
 
   private _render(): void {
@@ -189,6 +191,7 @@ class Block {
     this._element.innerHTML = '';
     this._element?.appendChild(block)
     this.addEvents()
+    this.addAttrs()
   }
 
   protected render(): string {
@@ -230,9 +233,18 @@ class Block {
     }
   }
 
+  addAttrs() {
+    if(this.attrs && this.element) {
+      console.log(this.attrs)
+      Object.keys(this?.attrs).forEach((attr) => {
+        this.element.setAttribute(attr, this.attrs[attr])
+      })
+    }
+  }
+
+
   addEvents() {
     if(this.props?.events && this.element) {
-      console.log(this.element)
       Object.keys(this.props?.events).forEach((eventName) => {
         this.element?.addEventListener(eventName, this.props?.events[eventName])
       })

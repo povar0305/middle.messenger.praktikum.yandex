@@ -225,6 +225,7 @@ switch (window.location.pathname) {
                     blur: (el) => {
                       el.preventDefault()
                       console.log('Значение инпута email: ', el.target.value)
+
                       const typeInput = el.target.getAttribute('data-validator')
                       const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -763,6 +764,58 @@ switch (window.location.pathname) {
             name: 'testName'
         })
         ],
+        events: {
+          submit: function (event) {
+            event.preventDefault()
+            const { elements } = event.target as HTMLFormElement;
+
+            const fields = Array.from(elements).filter((el) => el.nodeName === 'INPUT');
+            const formData = fields.reduce((acc: Record<string, string>, field: HTMLInputElement) => {
+              acc[field.name] = field.value;
+              return acc;
+            }, {});
+
+            console.log('Отправлено сообщение.', formData);
+          },
+        },
+        message: [new Input(
+          'div',
+          {
+            type: 'text',
+            name: 'message',
+            placeholder: 'Поиск',
+            validator: 'message',
+            attrs: {
+              class: 'sp-input--full'
+            },
+            events: {
+              blur: (el) => {
+                el.preventDefault()
+                console.log('Значение инпута message: ', el.target.value)
+                const typeInput = el.target.getAttribute('data-validator')
+                const isValid = validator({type: typeInput, value: el.target.value})
+
+                if (!isValid) {
+                  el.target.classList.add('sp-input_input--error')
+                  el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                } else {
+                  el.target.classList.remove('sp-input_input--error')
+                  el.target.nextElementSibling.textContent = null
+                }
+              }
+            }
+          }
+        ),
+          new Btn(
+            'div',
+            {
+              attrs: {
+                class: 'sp-wrapper--button'
+              },
+              text: 'Отправить',
+              type: 'submit'
+            }
+          )],
         action: [
           new Link(
             'div',{
