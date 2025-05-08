@@ -16,6 +16,8 @@ import Input from './src/components/input'
 import Btn from './src/components/btn'
 import Header from './src/components/header';
 import UserChat from "./src/components/user-chat";
+import {validator} from "./services/validator";
+import {descroptionErrors} from "./services/descroptionErrors";
 
 const homeLink = new Link(
   'div', {
@@ -217,7 +219,24 @@ switch (window.location.pathname) {
                 {
                   type: 'text',
                   name: 'email',
-                  placeholder: 'Почта'
+                  placeholder: 'Почта',
+                  validator: 'email',
+                  events: {
+                    blur: (el) => {
+                      el.preventDefault()
+                      console.log('Значение инпута email: ', el.target.value)
+                      const typeInput = el.target.getAttribute('data-validator')
+                      const isValid = validator({type: typeInput, value: el.target.value})
+
+                      if (!isValid) {
+                        el.target.classList.add('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                      } else {
+                        el.target.classList.remove('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = null
+                      }
+                    }
+                  }
                 }
               )
             }),
@@ -230,7 +249,23 @@ switch (window.location.pathname) {
                 {
                   type: 'text',
                   name: 'login',
-                  placeholder: 'Логин'
+                  placeholder: 'Логин',
+                  events: {
+                    blur: (el) => {
+                      el.preventDefault()
+                      console.log('Значение инпута login: ', el.target.value)
+                      const typeInput = el.target.getAttribute('data-validator')
+                      const isValid = validator({type: typeInput, value: el.target.value})
+
+                      if (!isValid) {
+                        el.target.classList.add('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                      } else {
+                        el.target.classList.remove('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = null
+                      }
+                    }
+                  }
                 }
               )
             }),
@@ -243,7 +278,24 @@ switch (window.location.pathname) {
                 {
                   type: 'text',
                   name: 'first_name',
-                  placeholder: 'Имя'
+                  placeholder: 'Имя',
+                  validator: 'name',
+                  events: {
+                    blur: (el) => {
+                      el.preventDefault()
+                      console.log('Значение инпута first_name: ', el.target.value)
+                      const typeInput = el.target.getAttribute('data-validator')
+                      const isValid = validator({type: typeInput, value: el.target.value})
+
+                      if (!isValid) {
+                        el.target.classList.add('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                      } else {
+                        el.target.classList.remove('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = null
+                      }
+                    }
+                  }
                 }
               )
             }),
@@ -256,7 +308,24 @@ switch (window.location.pathname) {
                 {
                   type: 'text',
                   name: 'second_name',
-                  placeholder: 'Фамилия'
+                  placeholder: 'Фамилия',
+                  validator: 'name',
+                  events: {
+                    blur: (el) => {
+                      el.preventDefault()
+                      console.log('Значение инпута second_name: ', el.target.value)
+                      const typeInput = el.target.getAttribute('data-validator')
+                      const isValid = validator({type: typeInput, value: el.target.value})
+
+                      if (!isValid) {
+                        el.target.classList.add('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                      } else {
+                        el.target.classList.remove('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = null
+                      }
+                    }
+                  }
                 }
               )
             }),
@@ -269,11 +338,27 @@ switch (window.location.pathname) {
                 {
                   type: 'text',
                   name: 'display_name',
-                  placeholder: 'Никнейм'
+                  placeholder: 'Никнейм',
+                  validator: 'message',
+                  events: {
+                    blur: (el) => {
+                      el.preventDefault()
+                      console.log('Значение инпута search: ', el.target.value)
+                      const typeInput = el.target.getAttribute('data-validator')
+                      const isValid = validator({type: typeInput, value: el.target.value})
+
+                      if (!isValid) {
+                        el.target.classList.add('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                      } else {
+                        el.target.classList.remove('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = null
+                      }
+                    }
+                  }
                 }
               )
-            }),
-
+            })
         ],
         action : new Btn(
           'div',
@@ -327,7 +412,26 @@ switch (window.location.pathname) {
             {
               type: 'text',
               name: 'login',
-              placeholder: 'Логин'
+              placeholder: 'Логин',
+              validator: 'login',
+              events: {
+                blur: (el) => {
+                  el.preventDefault()
+                  console.log('Значение инпута login: ', el.target.value)
+                  const typeInput = el.target.getAttribute('data-validator')
+                  const isValid = validator({type: typeInput, value: el.target.value})
+
+                  if (!isValid) {
+                    el.target.classList.add('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                  } else {
+                    el.target.classList.remove('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = null
+                  }
+
+
+                }
+              }
             }
           ),
           new Input(
@@ -336,10 +440,24 @@ switch (window.location.pathname) {
               type: 'password',
               name: 'password',
               placeholder: 'Пароль',
+              validator: 'password',
               events: {
                   blur: (el) => {
                     el.preventDefault()
-                    console.log('blur:', el)
+                    console.log('Значение инпута password: ', el.target.value)
+                    const typeInput = el.target.getAttribute('data-validator')
+                    const isValid = validator({type: typeInput, value: el.target.value})
+
+                    if (!isValid) {
+                      el.target.classList.add('sp-input_input--error')
+                      el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                    } else {
+                      el.target.classList.remove('sp-input_input--error')
+                      el.target.nextElementSibling.textContent = null
+
+                    }
+
+
                   }
               }
             }
@@ -400,7 +518,24 @@ switch (window.location.pathname) {
             {
               type: 'text',
               name: 'first_name',
-              placeholder: 'Имя'
+              placeholder: 'Имя',
+              validator: 'name',
+              events: {
+                blur: (el) => {
+                  el.preventDefault()
+                  console.log('Значение инпута first_name: ', el.target.value)
+                  const typeInput = el.target.getAttribute('data-validator')
+                  const isValid = validator({type: typeInput, value: el.target.value})
+
+                  if (!isValid) {
+                    el.target.classList.add('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                  } else {
+                    el.target.classList.remove('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = null
+                  }
+                }
+              }
             }
           ),
           new Input(
@@ -408,7 +543,24 @@ switch (window.location.pathname) {
             {
               type: 'text',
               name: 'second_name',
-              placeholder: 'Фамилия'
+              placeholder: 'Фамилия',
+              validator: 'name',
+              events: {
+                blur: (el) => {
+                  el.preventDefault()
+                  console.log('Значение инпута second_name: ', el.target.value)
+                  const typeInput = el.target.getAttribute('data-validator')
+                  const isValid = validator({type: typeInput, value: el.target.value})
+
+                  if (!isValid) {
+                    el.target.classList.add('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                  } else {
+                    el.target.classList.remove('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = null
+                  }
+                }
+              }
             }
           ),
           new Input(
@@ -416,7 +568,24 @@ switch (window.location.pathname) {
             {
               type: 'text',
               name: 'login',
-              placeholder: 'Логин'
+              placeholder: 'Логин',
+              validator: 'login',
+              events: {
+                blur: (el) => {
+                  el.preventDefault()
+                  console.log('Значение инпута login: ', el.target.value)
+                  const typeInput = el.target.getAttribute('data-validator')
+                  const isValid = validator({type: typeInput, value: el.target.value})
+
+                  if (!isValid) {
+                    el.target.classList.add('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                  } else {
+                    el.target.classList.remove('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = null
+                  }
+                }
+              }
             }
           ),
           new Input(
@@ -424,7 +593,24 @@ switch (window.location.pathname) {
             {
               type: 'text',
               name: 'email',
-              placeholder: 'Почта'
+              placeholder: 'Почта',
+              validator: 'email',
+              events: {
+                blur: (el) => {
+                  el.preventDefault()
+                  console.log('Значение инпута email: ', el.target.value)
+                  const typeInput = el.target.getAttribute('data-validator')
+                  const isValid = validator({type: typeInput, value: el.target.value})
+
+                  if (!isValid) {
+                    el.target.classList.add('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                  } else {
+                    el.target.classList.remove('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = null
+                  }
+                }
+              }
             }
           ),
           new Input(
@@ -432,7 +618,24 @@ switch (window.location.pathname) {
             {
               type: 'password',
               name: 'password',
-              placeholder: 'Пароль'
+              placeholder: 'Пароль',
+              validator: 'password',
+              events: {
+                blur: (el) => {
+                  el.preventDefault()
+                  console.log('Значение инпута password: ', el.target.value)
+                  const typeInput = el.target.getAttribute('data-validator')
+                  const isValid = validator({type: typeInput, value: el.target.value})
+
+                  if (!isValid) {
+                    el.target.classList.add('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                  } else {
+                    el.target.classList.remove('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = null
+                  }
+                }
+              }
             }
           ),
           new Input(
@@ -440,7 +643,24 @@ switch (window.location.pathname) {
             {
               type: 'text',
               name: 'phone',
-              placeholder: 'Номер телефона'
+              placeholder: 'Номер телефона',
+              validator: 'phone',
+              events: {
+                blur: (el) => {
+                  el.preventDefault()
+                  console.log('Значение инпута phone: ', el.target.value)
+                  const typeInput = el.target.getAttribute('data-validator')
+                  const isValid = validator({type: typeInput, value: el.target.value})
+
+                  if (!isValid) {
+                    el.target.classList.add('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                  } else {
+                    el.target.classList.remove('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = null
+                  }
+                }
+              }
             }
           )
         ],
@@ -558,7 +778,24 @@ switch (window.location.pathname) {
             {
               type: 'text',
               name: 'search',
-              placeholder: 'Поиск'
+              placeholder: 'Поиск',
+              validator: 'message',
+              events: {
+                blur: (el) => {
+                  el.preventDefault()
+                  console.log('Значение инпута search: ', el.target.value)
+                  const typeInput = el.target.getAttribute('data-validator')
+                  const isValid = validator({type: typeInput, value: el.target.value})
+
+                  if (!isValid) {
+                    el.target.classList.add('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                  } else {
+                    el.target.classList.remove('sp-input_input--error')
+                    el.target.nextElementSibling.textContent = null
+                  }
+                }
+              }
             }
           )
         ]

@@ -6,7 +6,12 @@ const tpl = `
     name="{{name}}"
     placeholder="{{placeholder}}"
     required="{{required}}"
+    data-validator="{{validator}}"
   >
+  
+  <span class="sp-input_error-text">
+    {{error}}
+  </span>
 </div>`;
 
 export default tpl;

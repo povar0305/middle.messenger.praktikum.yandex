@@ -101,8 +101,6 @@ class Block {
     console.log('context',context)
     const contextAndStubs = { ...context };
 
-    const fragment = document.createElement('template');
-
     Object.keys(this.children).forEach((key) => {
       contextAndStubs[key] = `<div data-id="${this.children[key]?._id}"></div>`;
     });
@@ -111,39 +109,38 @@ class Block {
       contextAndStubs[key] = `<div data-id="list__${key}"></div>`;
     });
 
+    const fragment = document.createElement('template');
     fragment.innerHTML = Handlebars.compile(template)(contextAndStubs);
-
+    console.log('fragment',fragment)
     Object.values(this.children).forEach((child) => {
       if (child instanceof Block) {
         const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
 
-        if (!stub) return;
-
-        stub.replaceWith(child.getContent());
+        if (stub) {
+          stub.replaceWith(child.getContent());
+        }
       }
     });
 
     Object.entries(this.lists).forEach(([key, child]) => {
       const stub = fragment.content.querySelector(`[data-id="list__${key}"]`);
 
-      if (!stub) return;
+      if (!stub) return ;
 
       const listContent = document.createElement('template');
 
-      if(Array.isArray(child)) {
-        child?.forEach((element: Block | boolean | string | HTMLElement) => {
-          if (element instanceof Block) {
-            listContent.content.append(element.getContent());
-          } else {
-            listContent.content.append(`${element}`);
-          }
-        });
-      }
+      child.forEach((element: Block | boolean | string | HTMLElement) => {
+        if (element instanceof Block) {
+          listContent.content.append(element.getContent());
+        } else {
+          listContent.content.append(`${element}`);
+        }
+      });
 
       stub.replaceWith(listContent.content);
     });
 
-    return fragment.innerHTML;
+    return fragment.content;
   }
 
   private _componentDidMount(): void {
@@ -169,8 +166,17 @@ class Block {
 
   setProps(nextProps?: Partial<BlockProps>): void { // Используем Partial для частичного обновления свойств
     if (!nextProps) return;
+    const {children, props, lists} = this.getChildren(nextProps)
 
-    Object.assign(this.props, nextProps);
+    if (Object.values(children).length) {
+      Object.assign(this.children, children)
+    }
+    if (Object.values(lists).length) {
+      Object.assign(this.lists, lists)
+    }
+    if (Object.values(props).length) {
+      Object.assign(this.props, props)
+    }
   }
 
   get element(): HTMLElement | null {
@@ -178,10 +184,11 @@ class Block {
   }
 
   private _render(): void {
-    const block = this.render();
     this.removeEvents()
+    const block = this.render();
+    this._element.innerHTML = '';
+    this._element?.appendChild(block)
     this.addEvents()
-    this._element.innerHTML = block;
   }
 
   protected render(): string {
@@ -201,7 +208,7 @@ class Block {
       set(target, prop, value) {
         const oldValue = {...target};
         target[prop] = value;
-        this.eventBus.emit(Block.EVENTS.EVENT_FLOW_CDU, oldValue, target);
+        this._eventBus.emit(Block.EVENTS.EVENT_FLOW_CDU, oldValue, target);
         return true;
       }
     });
