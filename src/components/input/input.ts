@@ -9,7 +9,7 @@ const tpl = `
     data-validator="{{validator}}"
   >
   
-  <span class="sp-input_error-text">
+  <span>
     {{error}}
   </span>
 </div>`;
