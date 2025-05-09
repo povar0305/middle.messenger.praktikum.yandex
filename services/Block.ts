@@ -10,13 +10,15 @@ type EventBusType = {
 export type BlockProps = {
   [key: string]: Block | object | (() => void) | string,
   events: {[key:string]: (() => void)},
-  attrs: {[key:string]: string}
+  attrs: {[key:string]: string},
+  _id: string
 };
 
 interface ParsedProps {
-  children: { [key: string]: Block[] | Block };
+  children: { [key: string]: Block };
   props: { [key: string]: string | boolean | void | object };
   lists: { [key: string]: Block[] };
+  _id?: string
 }
 
 interface AnyProps {
@@ -24,7 +26,7 @@ interface AnyProps {
 }
 
 class Block {
-  private children: { [key: string]: Block[] | Block };
+  private children: BlockProps;
   private lists: { [key: string]: Block[] | Block };
   private _meta: { tagName: string; props: AnyProps };
   private eventBus: EventBusType;
@@ -51,8 +53,8 @@ class Block {
       props,
     };
 
-    this.props = this._makePropsProxy({ ...props, _id: this._id });
-    this.children = this._makePropsProxy({ ...children });
+    this.props = this._makePropsProxy({ ...props, _id: this._id, events: {}, attrs: {} });
+    this.children = this._makePropsProxy({ ...children, _id: this._id, events: {}, attrs: {} });
     this.lists = { ...lists };
 
     this._registerEvents(this.eventBus);
@@ -75,7 +77,7 @@ class Block {
         }
       });
     }
-
+    console.log(children)
     return { children, props, lists };
   }
 
@@ -209,6 +211,7 @@ class Block {
   }
 
   private _makePropsProxy(props: BlockProps): BlockProps {
+    const eventBus = this.eventBus
     return new Proxy(props, {
       get(target, prop:string) {
         const value = target[prop];
@@ -217,7 +220,7 @@ class Block {
       set(target, prop:string, value):boolean {
         const oldValue = {...target};
         target[prop] = value;
-        this._eventBus.emit(Block.EVENTS.EVENT_FLOW_CDU, oldValue, target);
+        eventBus.emit(Block.EVENTS.EVENT_FLOW_CDU, oldValue, target);
         return true;
       }
     });
