@@ -30,7 +30,7 @@ const homeLink = new Link(
 )
 
 const arrowBack = new ArrowBack()
-console.log(window.location.pathname)
+
 switch (window.location.pathname) {
   case '/': {
     const linkLogin = new Link(
