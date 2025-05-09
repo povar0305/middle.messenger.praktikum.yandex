@@ -7,14 +7,16 @@ type EventBusType = {
   emit: (event: string, ...args: unknown[]) => void;
 };
 
-export type BlockProps = { [key: string]: Block|boolean|string|never[]|object };
+export type BlockProps = {
+  [key: string]: Block | object | (() => void) | string,
+  events: {[key:string]: (() => void)},
+  attrs: {[key:string]: string}
+};
 
 interface ParsedProps {
-  children: { [key: string]: Block[]|Block };
-  props: { [key: string]: never }; // Здесь можно уточнить типы, если известны
-  lists: { [key: string]: never }; // Изменено на массив Block для списков
-  events: { [key: string]: () => void };
-  [key: string]: Block|boolean|string|never[]|object
+  children: { [key: string]: Block[] | Block };
+  props: { [key: string]: string | boolean | void | object };
+  lists: { [key: string]: Block[] };
 }
 
 interface AnyProps {
@@ -22,15 +24,14 @@ interface AnyProps {
 }
 
 class Block {
-  private children: AnyProps;
-  private _element: HTMLElement;
-  private _meta: { tagName: string; props: BlockProps } | null = null;
+  private children: { [key: string]: Block[] | Block };
+  private lists: { [key: string]: Block[] | Block };
+  private _meta: { tagName: string; props: AnyProps };
   private eventBus: EventBusType;
 
   protected props: BlockProps;
 
   private _id: string;
-  private lists: BlockProps;
 
   static EVENTS = {
     INIT: "init",
@@ -38,7 +39,7 @@ class Block {
     FLOW_RENDER: "flow:render",
     EVENT_FLOW_CDU: 'flow:component-did-update'
   };
-  private attrs: null | object;
+  private _element!: HTMLElement;
 
   constructor(tagName = "div", propsAndChild?: AnyProps) {
     this.eventBus = new EventBus();
@@ -52,8 +53,7 @@ class Block {
 
     this.props = this._makePropsProxy({ ...props, _id: this._id });
     this.children = this._makePropsProxy({ ...children });
-    this.lists = this._makePropsProxy({ ...lists });
-    this.attrs = this.props?.attrs || {};
+    this.lists = { ...lists };
 
     this._registerEvents(this.eventBus);
     this.eventBus.emit(Block.EVENTS.INIT);
@@ -62,21 +62,21 @@ class Block {
   getChildren(anyProps?: AnyProps): ParsedProps {
     const lists: { [key: string]: Block[] } = {};
     const children: { [key: string]: Block } = {};
-    const props: { [key: string]: never } = {};
+    const props: { [key: string]: string | boolean | void | object } = {};
 
     if (anyProps) {
-      Object.keys(anyProps).forEach((key) => {
+      Object.keys(anyProps).forEach((key:string) => {
         if (anyProps[key] instanceof Block) {
           children[key] = anyProps[key];
         } else if (Array.isArray(anyProps[key])) {
-          lists[key] = anyProps[key].filter(item => item instanceof Block); // Фильтруем только блоки
+          lists[key] = anyProps[key].filter(item => item instanceof Block);
         } else {
           props[key] = anyProps[key];
         }
       });
     }
 
-    return <ParsedProps>{children, props, lists};
+    return { children, props, lists };
   }
 
   private _registerEvents(eventBus: EventBusType): void {
@@ -103,8 +103,11 @@ class Block {
 
     const contextAndStubs = { ...context };
 
-    Object.keys(this.children).forEach((key) => {
-      contextAndStubs[key] = `<div data-id="${this.children[key]?._id}"></div>`;
+
+    Object.keys(this?.children).forEach((key) => {
+      if (this?.children[key] instanceof Block) {
+        contextAndStubs[key] = `<div data-id="${this?.children[key]._id}"></div>`;
+      }
     });
 
     Object.keys(this.lists).forEach((key) => {
@@ -131,13 +134,15 @@ class Block {
 
       const listContent = document.createElement('template');
 
-      child.forEach((element: Block | boolean | string | HTMLElement) => {
-        if (element instanceof Block) {
-          listContent.content.append(element.getContent());
-        } else {
-          listContent.content.append(`${element}`);
-        }
-      });
+      if (Array.isArray(child)) {
+        child.forEach((element: Block | boolean | string | HTMLElement) => {
+          if (element instanceof Block) {
+            listContent.content.append(element.getContent());
+          } else {
+            listContent.content.append(`${element}`);
+          }
+        });
+      }
 
       stub.replaceWith(listContent.content);
     });
@@ -189,26 +194,27 @@ class Block {
     this.removeEvents()
     const block = this.render();
     this._element.innerHTML = '';
+    console.log(typeof block)
     this._element?.appendChild(block)
     this.addEvents()
     this.addAttrs()
   }
 
-  protected render(): string {
-    return '';
+  protected render():Node {
+    return this.compile('{{{content}}}')
   }
 
-  getContent(): HTMLElement | null {
-    return this._element;
+  getContent() {
+    return this?._element;
   }
 
   private _makePropsProxy(props: BlockProps): BlockProps {
     return new Proxy(props, {
-      get(target, prop) {
+      get(target, prop:string) {
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
-      set(target, prop, value) {
+      set(target, prop:string, value):boolean {
         const oldValue = {...target};
         target[prop] = value;
         this._eventBus.emit(Block.EVENTS.EVENT_FLOW_CDU, oldValue, target);
@@ -234,10 +240,9 @@ class Block {
   }
 
   addAttrs() {
-    if(this.attrs && this.element) {
-      console.log(this.attrs)
-      Object.keys(this?.attrs).forEach((attr) => {
-        this.element.setAttribute(attr, this.attrs[attr])
+    if(this.props?.attrs && this.element) {
+      Object.keys(this.props?.attrs).forEach((attr) => {
+        this.element.setAttribute(attr, this.props?.attrs[attr])
       })
     }
   }

@@ -1,6 +1,5 @@
 {
   "extends": [
-    "stylelint-config-standard",
     "stylelint-scss"
   ],
   "rules": {
@@ -8,12 +7,6 @@
       true,
       {
         "ignoreAtRules": ["use", "forward"]
-      }
-    ],
-    "declaration-property-value-no-unknown": [
-      true,
-      {
-        "ignoreProperties": ["border-bottom"]
       }
     ]
   }

@@ -2,7 +2,7 @@ import Block from "../../../services/Block.ts";
 import tpl from './input.ts'
 
 export default class Input extends Block {
-  render() {
+  render():Node {
     return this.compile(tpl)
   }
 
@@ -12,7 +12,8 @@ export default class Input extends Block {
       Object.keys(this.props.events).forEach((eventName) => {
 
      if (this.element?.querySelector('input')) {
-          this.element?.querySelector('input').addEventListener(eventName, this.props.events[eventName])
+       const eventHandler = this.props.events as { [key: string]: (event: Event) => void };
+       this.element?.querySelector('input')?.addEventListener(eventName, eventHandler[eventName]);
         }
       })
     }
