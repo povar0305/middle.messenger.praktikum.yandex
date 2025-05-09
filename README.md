@@ -4,9 +4,13 @@
 * Опубликованное [в Netlify приложение](https://sonyaqwerty.netlify.app/)
 
 ## Текущий статус
-В данной ветке хранится результат работы 1го спринта с [курса](https://practicum.yandex.ru/profile/middle-frontend/)
+В данной ветке хранится результат работы 2го спринта с [курса](https://practicum.yandex.ru/profile/middle-frontend/)
 
-В рамках данного спринта необходимо было собрать основные страницы([авторизация](https://sonyaqwerty.netlify.app/login), [регистрация](https://sonyaqwerty.netlify.app/signin), [страница пользователя](https://sonyaqwerty.netlify.app/profile), [редактирование пользователя](https://sonyaqwerty.netlify.app/update-profile), [404](https://sonyaqwerty.netlify.app/404), [500](https://sonyaqwerty.netlify.app/500) и [заглушка для страницы чата](https://sonyaqwerty.netlify.app/chants)), настроить eslint, vite. Для стилей я выбрала sass.
+В рамках данного спринта необходимо было пересобрать основные страницы([авторизация](https://sonyaqwerty.netlify.app/login), [регистрация](https://sonyaqwerty.netlify.app/signin), [страница пользователя](https://sonyaqwerty.netlify.app/profile), [редактирование пользователя](https://sonyaqwerty.netlify.app/update-profile), [404](https://sonyaqwerty.netlify.app/404), [500](https://sonyaqwerty.netlify.app/500) и [заглушка для страницы чата](https://sonyaqwerty.netlify.app/chants)) используя компонентный подход. Реализовать для компонентного подхода класс Block, EventBus. На всех формах реализовать отправку форм в консоль, реализовать валидацию полей по типам.
+
+Так же настроила stylelint, eslint.
+
+Созадала класс Http для работы с апи.
 
 ## Установка и запуск
 
