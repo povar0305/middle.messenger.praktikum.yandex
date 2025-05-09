@@ -1,75 +1,18 @@
 <!doctype html>
 <html lang="ru">
-  {{> head title="Главная"}}
-
+<head>
+  <meta charset="UTF-8">
+  <title>Общение</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="/src/style/main.scss" rel="stylesheet">
+</head>
   <body>
     <main>
-      <nav class="sp-wrapper">
-        <ul>
-          <li>
-            {{>
-              link
-              text="Авторизация"
-              href="/login"
-              class="sp-link--center"
-            }}
-          </li>
-
-          <li>
-            {{>
-              link
-              text="Регистрация"
-              href="/signin"
-              class="sp-link--center"
-            }}
-          </li>
-
-          <li>
-            {{>
-              link
-              text="404"
-              href="/404"
-              class="sp-link--center"
-            }}
-          </li>
-
-          <li>
-            {{>
-              link
-              text="500"
-              href="/500"
-              class="sp-link--center"
-            }}
-          </li>
-
-          <li>
-            {{>
-              link
-              text="Профиль"
-              href="/profile"
-              class="sp-link--center"
-            }}
-          </li>
-
-          <li>
-            {{>
-              link
-              text="Обновление профиля"
-              href="/update-profile"
-              class="sp-link--center"
-            }}
-          </li>
-
-          <li>
-            {{>
-              link
-              text="Чат-заглушка"
-              href="/chats"
-              class="sp-link--center"
-            }}
-          </li>
-        </ul>
-      </nav>
+      <div id="app"> </div>
     </main>
+
+    <script src="/main.ts" type="module"></script>
   </body>
 </html>

@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "moduleResolution": "node",
@@ -20,5 +23,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules"] // Исключение папки node_modules
+  "exclude": ["node_modules"]
 }
