@@ -77,7 +77,7 @@ class Block {
         }
       });
     }
-    console.log(children)
+
     return { children, props, lists };
   }
 
@@ -194,10 +194,11 @@ class Block {
 
   private _render(): void {
     this.removeEvents()
+
     const block = this.render();
     this._element.innerHTML = '';
-    console.log(typeof block)
     this._element?.appendChild(block)
+
     this.addEvents()
     this.addAttrs()
   }

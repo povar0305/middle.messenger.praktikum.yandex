@@ -7,7 +7,6 @@ export default class Input extends Block {
   }
 
   addEvents() {
-    // console.log('this.props?.events', this.props?.events)
     if (this.props?.events) {
       Object.keys(this.props.events).forEach((eventName) => {
 
