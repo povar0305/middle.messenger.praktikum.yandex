@@ -7,12 +7,10 @@ type EventBusType = {
   emit: (event: string, ...args: unknown[]) => void;
 };
 
-export type BlockProps = {
-  [key: string]: Block | object | (() => void) | string,
-  events: {[key:string]: (() => void)},
-  attrs: {[key:string]: string},
-  _id: string
-};
+interface BlockProps {
+  [key: string]: Block | object | (() => void) | string | undefined,
+  _id: string | undefined
+}
 
 interface ParsedProps {
   children: { [key: string]: Block };
@@ -53,8 +51,8 @@ class Block {
       props,
     };
 
-    this.props = this._makePropsProxy({ ...props, _id: this._id, events: {}, attrs: {} });
-    this.children = this._makePropsProxy({ ...children, _id: this._id, events: {}, attrs: {} });
+    this.props = this._makePropsProxy({ ...props, _id: this._id });
+    this.children = this._makePropsProxy({ ...children, _id: this._id  });
     this.lists = { ...lists };
 
     this._registerEvents(this.eventBus);
@@ -244,28 +242,28 @@ class Block {
   }
 
   addAttrs() {
-    if(this.props?.attrs && this.element) {
-      Object.keys(this.props?.attrs).forEach((attr) => {
-        this.element.setAttribute(attr, this.props?.attrs[attr])
-      })
-    }
+    const { attrs = {} } = this.props;
+
+    Object.entries(attrs).forEach(([attrName, attrValue]: [string, string]) => {
+      this.element.setAttribute(attrName, attrValue)
+    });
   }
 
 
   addEvents() {
-    if(this.props?.events && this.element) {
-      Object.keys(this.props?.events).forEach((eventName) => {
-        this.element?.addEventListener(eventName, this.props?.events[eventName])
-      })
-    }
+    const { events = {} } = this.props;
+
+    Object.entries(events).forEach(([eventName, event]: [string, (evt: Event) => object]) => {
+      this.element.addEventListener(eventName, event);
+    });
   }
 
   removeEvents() {
-    if(this.props?.events && this.element) {
-      Object.keys(this.props?.events).forEach((eventName) => {
-        this.element?.removeEventListener(eventName, this.props?.events[eventName])
-      })
-    }
+    const { events = {} } = this.props;
+
+    Object.entries(events).forEach(([eventName, event]: [string, (evt: Event) => object]) => {
+      this.element.removeEventListener(eventName, event);
+    });
   }
 }
 
