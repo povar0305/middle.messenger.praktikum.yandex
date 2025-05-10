@@ -175,7 +175,7 @@ switch (window.location.pathname) {
           class: 'sp-link'
         },
         text: 'Обновить пароль',
-        href: '/'
+        href: '/update-password'
       }
     )
     const exitLink = new Link(
@@ -210,13 +210,39 @@ switch (window.location.pathname) {
     const updateProfileUser = new UpdateProfile(
       'div',
       {
-        content: [
+        events: {
+          submit: function (event) {
+            event.preventDefault()
+            const { elements } = event.target as HTMLFormElement;
+
+            const fields = Array.from(elements).filter((el) => el.nodeName === 'INPUT');
+            const formData = fields.reduce((acc: Record<string, string>, field: HTMLInputElement) => {
+              acc[field.name] = field.value;
+              return acc;
+            }, {});
+
+            console.log('Отправлена форма изменения данных.', formData);
+          },
+        },
+        content: [ new Input(
+          'div',
+          {
+            attrs: {
+              class: 'sp-wrapper--input-avatar',
+            },
+            type: 'file',
+            name: 'avatar',
+            accept: 'image/*'
+          }
+        ),
           new Setting('div',
             {
-              label: 'Почта',
               component: new Input(
                 'div',
                 {
+                  attrs: {
+                    class: 'sp-wrapper--input'
+                  },
                   type: 'text',
                   name: 'email',
                   placeholder: 'Почта',
@@ -241,16 +267,18 @@ switch (window.location.pathname) {
                 }
               )
             }),
-
           new Setting('div',
             {
-              label: 'Логин',
               component: new Input(
                 'div',
                 {
+                  attrs: {
+                    class: 'sp-wrapper--input',
+                  },
                   type: 'text',
                   name: 'login',
                   placeholder: 'Логин',
+                  validator: 'login',
                   events: {
                     blur: (el) => {
                       el.preventDefault()
@@ -273,10 +301,12 @@ switch (window.location.pathname) {
 
           new Setting('div',
             {
-              label: 'Имя',
               component: new Input(
                 'div',
                 {
+                  attrs: {
+                    class: 'sp-wrapper--input',
+                  },
                   type: 'text',
                   name: 'first_name',
                   placeholder: 'Имя',
@@ -303,10 +333,12 @@ switch (window.location.pathname) {
 
           new Setting('div',
             {
-              label: 'Фамилия',
               component: new Input(
                 'div',
                 {
+                  attrs: {
+                    class: 'sp-wrapper--input',
+                  },
                   type: 'text',
                   name: 'second_name',
                   placeholder: 'Фамилия',
@@ -333,10 +365,12 @@ switch (window.location.pathname) {
 
           new Setting('div',
             {
-              label: 'Никнейм',
               component: new Input(
                 'div',
                 {
+                  attrs: {
+                    class: 'sp-wrapper--input',
+                  },
                   type: 'text',
                   name: 'display_name',
                   placeholder: 'Никнейм',
@@ -345,6 +379,111 @@ switch (window.location.pathname) {
                     blur: (el) => {
                       el.preventDefault()
                       console.log('Значение инпута search: ', el.target.value)
+                      const typeInput = el.target.getAttribute('data-validator')
+                      const isValid = validator({type: typeInput, value: el.target.value})
+
+                      if (!isValid) {
+                        el.target.classList.add('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                      } else {
+                        el.target.classList.remove('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = null
+                      }
+                    }
+                  }
+                }
+              )
+            })
+        ],
+        action : new Btn(
+          'div',
+          {
+            text: 'Сохранить',
+            type: 'submit'
+          }
+        )
+      }
+    )
+
+    const profileTpl = new User(
+      'div',
+      {
+        arrow: arrowBack,
+        profile: updateProfileUser
+      })
+
+    renderDom('#app', profileTpl)
+  }
+    break;
+
+  case '/update-password': {
+    const updateProfileUser = new UpdateProfile(
+      'div',
+      {
+        events: {
+          submit: function (event) {
+            event.preventDefault()
+            const { elements } = event.target as HTMLFormElement;
+
+            const fields = Array.from(elements).filter((el) => el.nodeName === 'INPUT');
+            const formData = fields.reduce((acc: Record<string, string>, field: HTMLInputElement) => {
+              acc[field.name] = field.value;
+              return acc;
+            }, {});
+
+            console.log('Отправлена форма изменения пароля.', formData);
+          },
+        },
+        content: [
+          new Setting('div',
+            {
+              component: new Input(
+                'div',
+                {
+                  attrs: {
+                    class: 'sp-wrapper--input',
+                  },
+                  type: 'password',
+                  name: 'oldPassword',
+                  placeholder: 'Старый пароль',
+                  validator: 'password',
+                  events: {
+                    blur: (el) => {
+                      el.preventDefault()
+                      console.log('Значение инпута oldPassword: ', el.target.value)
+
+                      const typeInput = el.target.getAttribute('data-validator')
+                      const isValid = validator({type: typeInput, value: el.target.value})
+
+                      if (!isValid) {
+                        el.target.classList.add('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = descroptionErrors[typeInput]
+                      } else {
+                        el.target.classList.remove('sp-input_input--error')
+                        el.target.nextElementSibling.textContent = null
+                      }
+                    }
+                  }
+                }
+              )
+            }),
+          new Setting('div',
+            {
+              component: new Input(
+                'div',
+                {
+                  attrs: {
+                    class: 'sp-wrapper--input',
+                  },
+                  type: 'password',
+                  name: 'newPassword',
+                  placeholder: 'Новый пароль',
+                  validator: 'password',
+                  events: {
+                    blur: (el) => {
+                      el.preventDefault()
+                      console.log('Значение инпута newPassword: ', el.target.value)
+
                       const typeInput = el.target.getAttribute('data-validator')
                       const isValid = validator({type: typeInput, value: el.target.value})
 
