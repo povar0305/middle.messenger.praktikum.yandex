@@ -58,6 +58,16 @@ h1 {
     width: fit-content;
   }
 
+  &--input {
+    width: 100%;
+
+    &-avatar {
+      input {
+        border: none;
+      }
+    }
+  }
+
   &--small {
     box-shadow: 0 0 6px 0 #00000024;
     width: 340px;
@@ -117,7 +127,7 @@ h1 {
 
       & + span {
         display: block;
-        color: $error-color;
+        color: $error-color!important;
       }
     }
 

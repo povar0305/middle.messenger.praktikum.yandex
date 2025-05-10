@@ -18,7 +18,7 @@ type TRequestOptions = {
 function queryStringify(data: TRequestData) {
   if (!data) return '';
   return Object.entries(data).reduce((acc, [key, value], index, arr) => {
-    return `${acc}${key}=${value}${index < arr.length - 1 ? '&' : ''}`;
+    return `${acc}${encodeURIComponent(key)}=${encodeURIComponent(value)}${index < arr.length - 1 ? '&' : ''}`;
   }, '?');
 }
 

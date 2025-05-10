@@ -7,6 +7,7 @@ const tpl = `
     placeholder="{{placeholder}}"
     required="{{required}}"
     data-validator="{{validator}}"
+    accept="{{accept}}"
   >
   
   <span>
