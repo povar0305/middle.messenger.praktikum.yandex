@@ -1,26 +1,27 @@
-@use 'variables';
+@use 'variables' as *;
 
-body{
+body {
   margin: 0;
 }
 
 * {
-  font-family: "Montserrat", sans-serif;
+  font-family: Montserrat, sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
   margin: 0;
 }
 
 .sp-header {
-  color: variables.$text-color;
+  color: $text-color;
   font-size: 1.25rem;
+
   &--center{
     text-align: center;
   }
 }
 
 h1 {
-  color: variables.$text-color;
+  color: $text-color;
   font-size: 2.25rem;
   width: auto;
 
@@ -30,7 +31,7 @@ h1 {
 }
 
 .sp-button {
-  background: variables.$primary-color;
+  background: $primary-color;
   padding: 0.75rem;
   height: auto;
   border: none;
@@ -40,8 +41,9 @@ h1 {
   font-size: 0.83rem;
   border-radius: 0.5rem;
   transition: 200ms;
+
   &:hover {
-    background: variables.$secondary-color;
+    background: $secondary-color;
   }
 }
 
@@ -52,9 +54,23 @@ h1 {
   align-items: center;
   justify-content: center;
 
+  &--button {
+    width: fit-content;
+  }
+
+  &--input {
+    width: 100%;
+
+    &-avatar {
+      input {
+        border: none;
+      }
+    }
+  }
+
   &--small {
     box-shadow: 0 0 6px 0 #00000024;
-    min-width: 340px;
+    width: 340px;
     padding: 1.5rem;
     border-radius: 0.75rem;
     margin: 0 auto;
@@ -83,30 +99,52 @@ h1 {
 
 
 .sp-input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &--full {
+    width: 100%;
+  }
+
+  & span {
+    display: none;
+    font-size: 0.83rem;
+  }
+
   &_input {
     all: unset;
     box-sizing: border-box;
     width: 100%;
     padding: 8px 12px;
-    border-bottom: 1px solid variables.$primary-bg;
+    border-bottom: 1px solid $primary-bg;
     font-size: 0.83rem;
-    color: variables.$text-color;
+    color: $text-color;
     transition: 200ms;
 
+    &--error{
+      border-bottom: 1px solid $error-color;
+
+      & + span {
+        display: block;
+        color: $error-color!important;
+      }
+    }
+
     &::placeholder {
-      color: variables.$secondary-text-color;
+      color: $secondary-text-color;
       opacity: 1;
     }
 
     &:focus, &:hover {
       outline: none;
-      border-color: variables.$secondary-color;
+      border-color: $secondary-color;
     }
   }
 }
 
 .sp-link {
-  color: variables.$primary-color;
+  color: $primary-color;
   font-size: 0.83rem;
   width: fit-content;
   text-decoration: none;
@@ -119,16 +157,16 @@ h1 {
   }
 
   &:hover {
-    color: variables.$secondary-color;
-    border-bottom: 1px solid variables.$secondary-color;
+    color: $secondary-color;
+    border-bottom: 1px solid $secondary-color;
   }
 
   &--error {
-    color: variables.$error-color;
+    color: $error-color;
 
     &:hover{
-      color: variables.$error-color--hover;
-      border-bottom: 1px solid variables.$error-color--hover;
+      color: $error-color--hover;
+      border-bottom: 1px solid $error-color--hover;
     }
   }
 }
@@ -158,18 +196,18 @@ h1 {
   position: absolute;
   padding: 0.5rem;
   border-radius: 999px;
-  background: variables.$primary-color;
+  background: $primary-color;
   cursor: pointer;
   height: 24px;
   width: 24px;
 
   & svg {
     transition: 200ms;
-    fill: variables.$white-color;
+    fill: $white-color;
   }
 
   &:hover {
-    background: variables.$secondary-color;
+    background: $secondary-color;
   }
 }
 
@@ -197,13 +235,13 @@ h1 {
 
     & svg {
       cursor: pointer;
-      fill: variables.$primary-bg;
+      fill: $primary-bg;
       width: 80px;
       height: 80px;
       transition: 200ms;
 
       &:hover {
-        fill: variables.$secondary-bg;
+        fill: $secondary-bg;
       }
     }
   }
@@ -215,11 +253,11 @@ h1 {
     align-items: center;
 
     & p {
-      color: variables.$text-color
+      color: $text-color
     }
 
     & span {
-      color: variables.$secondary-text-color
+      color: $secondary-text-color
     }
   }
 }
@@ -234,9 +272,114 @@ nav {
     gap: 1rem;
     flex-wrap: wrap;
     list-style: none;
+  }
+}
 
-    li {
+.sp-chats {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+  align-items: stretch;
 
+  &__list {
+    display: flex;
+    gap: 12px;
+    align-items: end;
+    flex-direction: column;
+    height: 100%;
+    min-width: 250px;
+    border-right: 1px solid $secondary-bg;
+    padding: 16px;
+
+    &--action {
+      display: flex;
+      gap: 16px;
+      flex-direction: column;
+      padding-bottom: 16px;
+      width: 100%;
+
+      .sp-input {
+        width: 100%;
+      }
     }
+  }
+
+  &__users {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__content {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    height: 100vh;
+
+    &--message {
+      background: $secondary-bg;
+      padding: 16px;
+      display: flex;
+      gap: 16px;
+    }
+
+    &--select {
+      flex: 1;
+      display: flex;
+      margin: auto;
+      align-items: center;
+    }
+  }
+}
+
+.sp-user-chat{
+  display: flex;
+  position: relative;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px;
+  transition: 200ms;
+  border-radius: 0.75rem;
+
+  img {
+    width: 50px;
+    height: 50px;
+  }
+
+  &:hover{
+    background: $primary-bg;
+  }
+
+  &--info {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+  }
+
+  span {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 10px;
+    color: $secondary-text-color;
+  }
+
+  p {
+    font-size: 14px;
+    color: $secondary-text-color;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 400;
   }
 }
