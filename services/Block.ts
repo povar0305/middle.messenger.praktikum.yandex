@@ -22,8 +22,7 @@ interface ParsedProps {
 interface AnyProps {
   [key: string]: Block|boolean|string|[]|object|Block[]|never|void;
 }
-
-class Block {
+export default class Block {
   private children: BlockProps;
   private lists: { [key: string]: Block[] | Block };
   private _meta: { tagName: string; props: AnyProps };
@@ -265,6 +264,11 @@ class Block {
       this.element.removeEventListener(eventName, event);
     });
   }
-}
 
-export default Block;
+  public destroy() {
+    this._element.remove();
+    this.onDestroy();
+  }
+
+  public onDestroy() {}
+}
