@@ -1,4 +1,4 @@
-import renderDom from "./services/render";
+import renderDom from "./utilits/render";
 
 import Base from "./src/layouts/base";
 import User from "./src/layouts/user";
@@ -16,8 +16,9 @@ import Input from './src/components/input'
 import Btn from './src/components/btn'
 import Header from './src/components/header';
 import UserChat from "./src/components/user-chat";
-import {validator} from "./services/validator";
-import {descroptionErrors} from "./services/descroptionErrors";
+
+import { validator } from "./utilits/validator";
+import { descroptionErrors } from "./utilits/descroptionErrors";
 
 const homeLink = new Link(
   'div', {

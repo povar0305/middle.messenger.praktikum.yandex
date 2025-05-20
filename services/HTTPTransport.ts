@@ -22,7 +22,7 @@ function queryStringify(data: TRequestData) {
   }, '?');
 }
 
-class Http {
+class HTTPTransport {
   public get = (url: string, options = {}) => {
     return this.request(url, { ...options, method: METHODS.GET });
   };
@@ -85,4 +85,4 @@ class Http {
   };
 }
 
-export default Http;
+export default HTTPTransport;
