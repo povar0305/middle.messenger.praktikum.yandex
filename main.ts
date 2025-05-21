@@ -18,6 +18,8 @@ import { validator } from "./utilits/validator";
 import { descroptionErrors } from "./utilits/descroptionErrors";
 import { router } from './router';
 
+import auth from "./services/controllers/Auth";
+
 const homeLink = new Link(
   'div', {
     attrs: {
@@ -412,7 +414,7 @@ const loginTpl = new Login(
   'div',
   {
     events: {
-      submit: function (event) {
+      submit: async function (event) {
         event.preventDefault()
         const { elements } = event.target as HTMLFormElement;
 
@@ -423,6 +425,13 @@ const loginTpl = new Login(
         }, {});
 
         console.log('Отправлена форма авторизации.', formData);
+
+        const result = await auth.signIn({
+          login: formData.login,
+          password: formData.password,
+        });
+
+        console.log(result)
       },
     },
     header: new Header(
@@ -503,7 +512,7 @@ const loginTpl = new Login(
             class: 'sp-link'
           },
           text: 'Зарегистрироваться',
-          href: '/signin'
+          href: '/sign-up'
         }
       )
     ],
@@ -599,6 +608,11 @@ const chatsTpl = new Chats(
         }, {});
 
         console.log('Отправлено сообщение.', formData);
+
+        auth.signIn({
+          login: formData.login,
+          password: formData.password,
+        });
       },
     },
     message: [new Input(
@@ -693,6 +707,15 @@ const signupTpl = new Login(
         }, {});
 
         console.log('Отправлена форма регистрации.', formData);
+
+        auth.signUp({
+          first_name: formData.first_name,
+          second_name: formData.second_name,
+          login: formData.login,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password
+        });
       },
     },
     header: new Header(
@@ -867,7 +890,7 @@ const signupTpl = new Login(
             class: 'sp-link'
           },
           text: 'Войти',
-          href: '/login'
+          href: '/'
         }
       )
     ]

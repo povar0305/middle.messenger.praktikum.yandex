@@ -80,13 +80,13 @@ private _onRoute(pathname: string) {
 
 public onRoute(callback: () => void) {
   this._onRouteCallback = callback;
-  return this; 
+  return this;
 
 }
 
 public setUnprotectedPaths(paths: `/${string}`[]) {
   this._unprotectedPaths = paths;
-  return this; 
+  return this;
 
 }
 
