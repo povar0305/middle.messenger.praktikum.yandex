@@ -19,19 +19,7 @@ import { descroptionErrors } from "./utilits/descroptionErrors";
 import { router } from './router';
 
 import auth from "./services/controllers/Auth";
-
-const homeLink = new Link(
-  'div', {
-    attrs: {
-      class: 'sp-link'
-    },
-    text: 'Назад',
-    href: '/'
-  }
-)
-
-
-const arrowBack = new ArrowBack()
+import user from "./services/controllers/User";
 
 //404
 const errorTpl404 = new Error(
@@ -42,7 +30,21 @@ const errorTpl404 = new Error(
       {
         error: '404',
         description: 'Упс, что-то пошло не так',
-        link: homeLink
+        link: new Link(
+          'div', {
+            attrs: {
+              class: 'sp-link'
+            },
+            text: 'Назад',
+            href: '/',
+            events: {
+              click: function(event) {
+                event.preventDefault()
+                router.back()
+              }
+            }
+          }
+        )
       }
     )
   }
@@ -57,7 +59,21 @@ const errorTpl500 = new Error(
       {
         error: '500',
         description: 'Что-то на сервере',
-        link: homeLink
+        link: new Link(
+          'div', {
+            attrs: {
+              class: 'sp-link'
+            },
+            text: 'Назад',
+            href: '/',
+            events: {
+              click: function(event) {
+                event.preventDefault()
+                router.back()
+              }
+            }
+          }
+        )
       }
     )
   }
@@ -94,7 +110,15 @@ const exitLink = new Link(
 const profileTpl = new User(
   'div',
   {
-    arrow: arrowBack,
+    arrow:  new ArrowBack(
+      'div',
+      {
+        events: {
+          click: function() {
+            router.back()
+          }
+        }
+      }),
     profile: new Profile(
       'div',
       {
@@ -303,7 +327,15 @@ const updateProfileUser = new UpdateProfile(
 const updateProfileTpl = new User(
 'div',
 {
-  arrow: arrowBack,
+  arrow:  new ArrowBack(
+    'div',
+    {
+      events: {
+        click: function() {
+          router.back()
+        }
+      }
+    }),
   profile: updateProfileUser
 })
 
@@ -314,7 +346,7 @@ const updatePasswordContent = new UpdateProfile(
   'div',
   {
     events: {
-      submit: function (event) {
+      submit: async function (event) {
         event.preventDefault()
         const { elements } = event.target as HTMLFormElement;
 
@@ -324,7 +356,10 @@ const updatePasswordContent = new UpdateProfile(
           return acc;
         }, {});
 
-        console.log('Отправлена форма изменения пароля.', formData);
+        await user.updatePassword({
+          oldPassword: formData.oldPassword,
+          newPassword: formData.newPassword
+        });
       },
     },
     content: [
@@ -405,7 +440,15 @@ const updatePasswordContent = new UpdateProfile(
 const updatePasswordTpl = new User(
   'div',
   {
-    arrow: arrowBack,
+    arrow:  new ArrowBack(
+      'div',
+      {
+        events: {
+          click: function() {
+            router.back()
+          }
+        }
+      }),
     profile: updatePasswordContent
   })
 
@@ -424,14 +467,10 @@ const loginTpl = new Login(
           return acc;
         }, {});
 
-        console.log('Отправлена форма авторизации.', formData);
-
-        const result = await auth.signIn({
+        await auth.signIn({
           login: formData.login,
           password: formData.password,
         });
-
-        console.log(result)
       },
     },
     header: new Header(
