@@ -940,16 +940,12 @@ const signupTpl = new Login(
 router
   .setUnprotectedPaths(['/', '/sign-up', '/500'])
   .onRoute(auth.checkAuth)
-  .use('/500', errorTpl500)
-  .use('/profile', profileTpl)
   .use('/sign-up', signupTpl)
   .use('/', loginTpl)
+  .use('/profile', profileTpl)
+  .use('/update-password', updatePasswordTpl)
   .use('/setting', updateProfileTpl)
   .use('/messenger', chatsTpl)
-  .use('/update-password', updatePasswordTpl)
+  .use('/500', errorTpl500)
   .use('*', errorTpl404)
   .start();
-
-router.onRoute(() => {
-  console.log('Маршрут изменился:', router.getLocationPathname());
-});

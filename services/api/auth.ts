@@ -9,13 +9,11 @@ class AuthApi extends Base {
 
   public signIn(data: IAuthApiSignIn) {
     return this.post('/signin', {
-      withCredentials: true,
       data,
     });
   }
   public updatePass(data: IUserPass) {
     return this.post('/password', {
-      withCredentials: true,
       data,
     });
   }
@@ -28,14 +26,12 @@ class AuthApi extends Base {
 
   public checkAuth() {
     return this.get('/user', {
-      withCredentials: true,
+      withCredentials: true
     });
   }
 
   public signOut() {
-    return this.post('/logout', {
-      withCredentials: true,
-    });
+    return this.post('/logout', {});
   }
 }
 
