@@ -46,7 +46,6 @@ class AuthSingInController {
   public checkAuth() {
     return auth.checkAuth()
         .then((user:IUser) => {
-          console.log(user)
           store.setState({
             currentUser: user,
           });

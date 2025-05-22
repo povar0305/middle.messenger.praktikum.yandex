@@ -36,7 +36,6 @@ const errorTpl404 = new Error(
               class: 'sp-link'
             },
             text: 'Назад',
-            href: '/',
             events: {
               click: function(event) {
                 event.preventDefault()
@@ -65,7 +64,6 @@ const errorTpl500 = new Error(
               class: 'sp-link'
             },
             text: 'Назад',
-            href: '/',
             events: {
               click: function(event) {
                 event.preventDefault()
@@ -86,7 +84,12 @@ const updateProfileLink = new Link(
       class: 'sp-link'
     },
     text: 'Обновить  данные',
-    href: '/setting'
+    events: {
+      click: function(event) {
+        event.preventDefault()
+        router.go('/settings')
+      }
+    }
   }
 )
 const updatePassLink = new Link(
@@ -95,7 +98,12 @@ const updatePassLink = new Link(
       class: 'sp-link'
     },
     text: 'Обновить пароль',
-    href: '/update-password'
+    events: {
+      click: function(event) {
+        event.preventDefault()
+        router.go('/update-password')
+      }
+    }
   }
 )
 const exitLink = new Link(
@@ -104,7 +112,12 @@ const exitLink = new Link(
       class: 'sp-link-error'
     },
     text: 'Выйти',
-    href: '/'
+    events: {
+      click: function(event) {
+        event.preventDefault()
+        auth.signOut()
+      }
+    }
   }
 )
 const profileTpl = new User(
@@ -551,7 +564,12 @@ const loginTpl = new Login(
             class: 'sp-link'
           },
           text: 'Зарегистрироваться',
-          href: '/sign-up'
+          events: {
+            click: function(event) {
+              event.preventDefault()
+              router.go('/sign-up')
+            }
+          }
         }
       )
     ],
@@ -699,7 +717,12 @@ const chatsTpl = new Chats(
             class: 'sp-link'
           },
           text: 'Профиль',
-          href: '/profile'
+          events: {
+            click: function(event) {
+              event.preventDefault()
+              router.go('/profile')
+            }
+          }
         }
       ),
       new Input(
@@ -929,7 +952,12 @@ const signupTpl = new Login(
             class: 'sp-link'
           },
           text: 'Войти',
-          href: '/'
+          events: {
+            click: function(event) {
+              event.preventDefault()
+              router.go('/')
+            }
+          }
         }
       )
     ]
