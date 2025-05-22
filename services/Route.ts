@@ -17,12 +17,12 @@ function render(query: string, block: Block): Element | false {
 
 class Route {
   private _pathname: string;
-  private _BlockClass: typeof Block;
+  private _BlockClass: Block;
   private _blockInstance: Block | null;
 
   constructor(
     pathname: string,
-    BlockClass: typeof Block,
+    BlockClass: Block,
     props: { rootQuery: string }
   ) {
     this._pathname = pathname;

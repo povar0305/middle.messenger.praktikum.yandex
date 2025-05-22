@@ -1,7 +1,7 @@
 
 import { router } from "../../router";
 import { handleError } from "../../utilits/apiHandler";
-import user from "../api/user";
+import auth from "../api/auth";
 
 
 export interface IUser {
@@ -19,13 +19,12 @@ export interface IUserPass {
 
 class UserController {
   public updatePassword(userPass: IUserPass) {
-    return user.updatePass(userPass)
+    return auth.updatePass(userPass)
       .then(() => {
         router.go('/');
       })
       .catch(handleError)
   }
-
 }
 
 export default new UserController();

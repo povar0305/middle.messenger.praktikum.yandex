@@ -938,7 +938,8 @@ const signupTpl = new Login(
 
 
 router
-  // .setUnprotectedPaths(['/sign-in', '/sign-up', '/500'])
+  .setUnprotectedPaths(['/', '/sign-up', '/500'])
+  .onRoute(auth.checkAuth)
   .use('/500', errorTpl500)
   .use('/profile', profileTpl)
   .use('/sign-up', signupTpl)
@@ -947,7 +948,6 @@ router
   .use('/messenger', chatsTpl)
   .use('/update-password', updatePasswordTpl)
   .use('*', errorTpl404)
-  .setUnprotectedPaths(['/'])
   .start();
 
 router.onRoute(() => {

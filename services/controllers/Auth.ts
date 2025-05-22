@@ -1,7 +1,8 @@
-
 import { router } from "../../router";
 import { handleError } from "../../utilits/apiHandler";
+import { store } from "../../store";
 import auth from "../api/auth";
+import {IUser} from "./User";
 
 export interface IAuthApiSignIn {
   login: string
@@ -29,8 +30,7 @@ class AuthSingInController {
   public signUp(user: IAuthApiSignUp) {
     auth.signUp(user)
       .then(() => {
-        console.log('ok')
-        router.go('/sign-in');
+        router.go('/');
       })
       .catch(handleError)
   }
@@ -39,22 +39,23 @@ class AuthSingInController {
     return auth.signOut()
       .then(() => {
         localStorage.removeItem('last-select-chat-id');
-        router.go('/sign-in');
+        router.go('/');
       });
   }
 
   public checkAuth() {
     return auth.checkAuth()
-      .then((user) => {
-        store.setState({
-          currentUser: user,
+        .then((user:IUser) => {
+          console.log(user)
+          store.setState({
+            currentUser: user,
+          });
+        })
+        .catch((error) => {
+          handleError(error);
+          router.go('/');
         });
-      })
-      .catch((error) => {
-        handleError(error);
-        router.go('/sign-in');
-      });
-  }
+    }
 }
 
 export default new AuthSingInController();

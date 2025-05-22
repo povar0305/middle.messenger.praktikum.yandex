@@ -1,5 +1,6 @@
 import Base from "./base";
-import {IAuthApiSignIn, IAuthApiSignUp} from "../controllers/Auth";
+import { IAuthApiSignIn, IAuthApiSignUp } from "../controllers/Auth";
+import { IUserPass } from "../controllers/User";
 
 class AuthApi extends Base {
   constructor() {
@@ -8,6 +9,12 @@ class AuthApi extends Base {
 
   public signIn(data: IAuthApiSignIn) {
     return this.post('/signin', {
+      withCredentials: true,
+      data,
+    });
+  }
+  public updatePass(data: IUserPass) {
+    return this.post('/password', {
       withCredentials: true,
       data,
     });
