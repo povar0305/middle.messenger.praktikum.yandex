@@ -20,7 +20,6 @@ import { router } from './router';
 
 import auth from "./services/controllers/Auth";
 import user from "./services/controllers/User";
-import {store} from "./store";
 
 //404
 const errorTpl404 = new Error(
@@ -88,7 +87,7 @@ const updateProfileLink = new Link(
     events: {
       click: function(event) {
         event.preventDefault()
-        router.go('/settings')
+        router.go('/setting')
       }
     }
   }
@@ -157,6 +156,7 @@ const updateProfileUser = new UpdateProfile(
       }, {});
 
       console.log('Отправлена форма изменения данных.', formData);
+      user.updateInfo(formData)
     },
   },
   content: [ new Input(
@@ -167,7 +167,8 @@ const updateProfileUser = new UpdateProfile(
       },
       type: 'file',
       name: 'avatar',
-      accept: 'image/*'
+      accept: 'image/*',
+      required: false
     }
   ),
     new Setting('div',
@@ -182,11 +183,10 @@ const updateProfileUser = new UpdateProfile(
             name: 'email',
             placeholder: 'Почта',
             validator: 'email',
+            required: true,
             events: {
               blur: (el) => {
                 el.preventDefault()
-                console.log('Значение инпута email: ', el.target.value)
-
                 const typeInput = el.target.getAttribute('data-validator')
                 const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -213,11 +213,12 @@ const updateProfileUser = new UpdateProfile(
             type: 'text',
             name: 'login',
             placeholder: 'Логин',
+            required: true,
             validator: 'login',
             events: {
               blur: (el) => {
                 el.preventDefault()
-                console.log('Значение инпута login: ', el.target.value)
+
                 const typeInput = el.target.getAttribute('data-validator')
                 const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -244,12 +245,13 @@ const updateProfileUser = new UpdateProfile(
             },
             type: 'text',
             name: 'first_name',
+            required: true,
             placeholder: 'Имя',
             validator: 'name',
             events: {
               blur: (el) => {
                 el.preventDefault()
-                console.log('Значение инпута first_name: ', el.target.value)
+
                 const typeInput = el.target.getAttribute('data-validator')
                 const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -276,12 +278,13 @@ const updateProfileUser = new UpdateProfile(
             },
             type: 'text',
             name: 'second_name',
+            required: true,
             placeholder: 'Фамилия',
             validator: 'name',
             events: {
               blur: (el) => {
                 el.preventDefault()
-                console.log('Значение инпута second_name: ', el.target.value)
+
                 const typeInput = el.target.getAttribute('data-validator')
                 const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -313,7 +316,7 @@ const updateProfileUser = new UpdateProfile(
             events: {
               blur: (el) => {
                 el.preventDefault()
-                console.log('Значение инпута search: ', el.target.value)
+
                 const typeInput = el.target.getAttribute('data-validator')
                 const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -387,12 +390,12 @@ const updatePasswordContent = new UpdateProfile(
               },
               type: 'password',
               name: 'oldPassword',
+              required: true,
               placeholder: 'Старый пароль',
               validator: 'password',
               events: {
                 blur: (el) => {
                   el.preventDefault()
-                  console.log('Значение инпута oldPassword: ', el.target.value)
 
                   const typeInput = el.target.getAttribute('data-validator')
                   const isValid = validator({type: typeInput, value: el.target.value})
@@ -419,12 +422,12 @@ const updatePasswordContent = new UpdateProfile(
               },
               type: 'password',
               name: 'newPassword',
+              required: true,
               placeholder: 'Новый пароль',
               validator: 'password',
               events: {
                 blur: (el) => {
                   el.preventDefault()
-                  console.log('Значение инпута newPassword: ', el.target.value)
 
                   const typeInput = el.target.getAttribute('data-validator')
                   const isValid = validator({type: typeInput, value: el.target.value})
@@ -500,12 +503,13 @@ const loginTpl = new Login(
         {
           type: 'text',
           name: 'login',
+          required: true,
           placeholder: 'Логин',
           validator: 'login',
           events: {
             blur: (el) => {
               el.preventDefault()
-              console.log('Значение инпута login: ', el.target.value)
+
               const typeInput = el.target.getAttribute('data-validator')
               const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -527,12 +531,13 @@ const loginTpl = new Login(
         {
           type: 'password',
           name: 'password',
+          required: true,
           placeholder: 'Пароль',
           validator: 'password',
           events: {
             blur: (el) => {
               el.preventDefault()
-              console.log('Значение инпута password: ', el.target.value)
+
               const typeInput = el.target.getAttribute('data-validator')
               const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -679,6 +684,7 @@ const chatsTpl = new Chats(
         type: 'text',
         name: 'message',
         placeholder: 'Поиск',
+        required: true,
         validator: 'message',
         attrs: {
           class: 'sp-input--full'
@@ -686,7 +692,7 @@ const chatsTpl = new Chats(
         events: {
           blur: (el) => {
             el.preventDefault()
-            console.log('Значение инпута message: ', el.target.value)
+
             const typeInput = el.target.getAttribute('data-validator')
             const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -731,12 +737,13 @@ const chatsTpl = new Chats(
         {
           type: 'text',
           name: 'search',
+          required: true,
           placeholder: 'Поиск',
           validator: 'message',
           events: {
             blur: (el) => {
               el.preventDefault()
-              console.log('Значение инпута search: ', el.target.value)
+
               const typeInput = el.target.getAttribute('data-validator')
               const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -794,12 +801,13 @@ const signupTpl = new Login(
         {
           type: 'text',
           name: 'first_name',
+          required: true,
           placeholder: 'Имя',
           validator: 'name',
           events: {
             blur: (el) => {
               el.preventDefault()
-              console.log('Значение инпута first_name: ', el.target.value)
+
               const typeInput = el.target.getAttribute('data-validator')
               const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -819,12 +827,13 @@ const signupTpl = new Login(
         {
           type: 'text',
           name: 'second_name',
+          required: true,
           placeholder: 'Фамилия',
           validator: 'name',
           events: {
             blur: (el) => {
               el.preventDefault()
-              console.log('Значение инпута second_name: ', el.target.value)
+
               const typeInput = el.target.getAttribute('data-validator')
               const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -844,12 +853,13 @@ const signupTpl = new Login(
         {
           type: 'text',
           name: 'login',
+          required: true,
           placeholder: 'Логин',
           validator: 'login',
           events: {
             blur: (el) => {
               el.preventDefault()
-              console.log('Значение инпута login: ', el.target.value)
+
               const typeInput = el.target.getAttribute('data-validator')
               const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -869,12 +879,13 @@ const signupTpl = new Login(
         {
           type: 'text',
           name: 'email',
+          required: true,
           placeholder: 'Почта',
           validator: 'email',
           events: {
             blur: (el) => {
               el.preventDefault()
-              console.log('Значение инпута email: ', el.target.value)
+
               const typeInput = el.target.getAttribute('data-validator')
               const isValid = validator({type: typeInput, value: el.target.value})
 
@@ -894,12 +905,13 @@ const signupTpl = new Login(
         {
           type: 'password',
           name: 'password',
+          required: true,
           placeholder: 'Пароль',
           validator: 'password',
           events: {
             blur: (el) => {
               el.preventDefault()
-              console.log('Значение инпута password: ', el.target.value)
+
               const typeInput = el.target.getAttribute('data-validator')
               const isValid = validator({type: typeInput, value: el.target.value})
 

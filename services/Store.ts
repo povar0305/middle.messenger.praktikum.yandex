@@ -86,9 +86,6 @@ class Store {
         this.eventBus().emit(Store.EVENTS.FLOW_SDU, this._meta.state, target);
         return true;
       },
-      get: () => {
-        return this.state
-      },
       deleteProperty: () => {
         throw new Error('Нет доступа');
       },

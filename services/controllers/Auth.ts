@@ -1,8 +1,8 @@
 import { router } from "../../router";
 import { handleError } from "../../utilits/apiHandler";
 import { store } from "../../store";
+import { IUser } from "./User";
 import auth from "../api/auth";
-import {IUser} from "./User";
 
 export interface IAuthApiSignIn {
   login: string
@@ -22,10 +22,6 @@ class AuthSingInController {
   public signIn(user: IAuthApiSignIn) {
     return auth.signIn(user)
       .then(async () => {
-        await auth.checkAuth()
-
-        console.log('store.state.currentUser',store.state.currentUser)
-
         if (store.state.currentUser) {
           router.go('/messenger');
         }
@@ -58,6 +54,7 @@ class AuthSingInController {
         })
         .catch((error) => {
           handleError(error);
+          auth.signOut()
           router.go('/');
         });
     }

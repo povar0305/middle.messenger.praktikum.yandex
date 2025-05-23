@@ -88,6 +88,7 @@ export default class Block {
   private _createResources(): void {
     const { tagName } = this._meta!;
     this._element = this._createDocumentElement(tagName);
+    this.dispatchComponentDidMount()
   }
 
   init(): void {
@@ -101,7 +102,6 @@ export default class Block {
     }
 
     const contextAndStubs = { ...context };
-
 
     Object.keys(this?.children).forEach((key) => {
       if (this?.children[key] instanceof Block) {
