@@ -20,6 +20,7 @@ import { router } from './router';
 
 import auth from "./services/controllers/Auth";
 import user from "./services/controllers/User";
+import {store} from "./store";
 
 //404
 const errorTpl404 = new Error(

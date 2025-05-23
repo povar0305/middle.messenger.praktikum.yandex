@@ -149,13 +149,13 @@ export default class Block {
     return fragment.content;
   }
 
-  private _componentDidMount(): void {
+  private _componentDidMount() {
     this.componentDidMount();
+    this.eventBus.emit(Block.EVENTS.FLOW_RENDER);
   }
 
-  componentDidMount(oldProps?: BlockProps): void {
-    console.log('componentDidMount',oldProps)
-  }
+  public componentDidMount() {}
+
 
   dispatchComponentDidMount(): void {
     this.eventBus.emit(Block.EVENTS.FLOW_CDM);
