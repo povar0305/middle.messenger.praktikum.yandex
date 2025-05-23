@@ -3,7 +3,6 @@ import { handleError } from "../../utilits/apiHandler";
 import auth from "../api/auth";
 import user from "../api/user";
 
-
 export interface IUser {
   first_name: string
   second_name: string
@@ -29,7 +28,7 @@ class UserController {
   }
 
   public updateAvatar(avatar: FormData) {
-    return user.updareProfileAvatar(avatar)
+    return user.updateProfileAvatar(avatar)
       .then(() => {
         router.go('/profile');
       })
@@ -37,17 +36,19 @@ class UserController {
   }
 
   public updateInfo(userData: {[key:string]:string}) {
-    return user.updareProfile(userData)
+    return user.updateProfile(userData)
       .then(() => {
-        if (userData.avatar !== '') {
-          const inputFile = document.querySelector('input[type="file"]');
+        const inputFile = document.querySelector('input[type="file"]');
+
+        if (inputFile.files[0]) {
 
           const data = new FormData()
           data.append('avatar', inputFile.files[0])
 
           this.updateAvatar(data)
         }
-        router.go('/profile');
+
+        // router.go('/profile');
       })
       .catch(handleError)
   }

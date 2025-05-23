@@ -77,7 +77,9 @@ class HTTPTransport {
       xhr.timeout = timeout;
       xhr.ontimeout = reject;
 
-      if (method === METHODS.GET || !data) {
+      if (data instanceof FormData) {
+        xhr.send(data);
+      } else if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
         xhr.send(JSON.stringify(data));

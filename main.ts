@@ -155,7 +155,6 @@ const updateProfileUser = new UpdateProfile(
         return acc;
       }, {});
 
-      console.log('Отправлена форма изменения данных.', formData);
       user.updateInfo(formData)
     },
   },
@@ -776,8 +775,6 @@ const signupTpl = new Login(
           return acc;
         }, {});
 
-        console.log('Отправлена форма регистрации.', formData);
-
         auth.signUp({
           first_name: formData.first_name,
           second_name: formData.second_name,
@@ -936,7 +933,7 @@ const signupTpl = new Login(
           events: {
             blur: (el) => {
               el.preventDefault()
-              console.log('Значение инпута phone: ', el.target.value)
+
               const typeInput = el.target.getAttribute('data-validator')
               const isValid = validator({type: typeInput, value: el.target.value})
 

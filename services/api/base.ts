@@ -1,15 +1,13 @@
 import HTTPTransport from "../HTTPTransport";
 import env from "../../utilits/env";
 
-const defaultHeaders = {
-  'Content-type': 'application/json; charset=UTF-8',
-};
 
 interface IBaseApi {
   baseUrl?: string,
   path?: `/${string}`
   headers?: Record<string, string>
 }
+
 const http = new HTTPTransport()
 
 class BaseApi {
@@ -22,7 +20,7 @@ class BaseApi {
     this._http = http;
     this._baseUrl = config.baseUrl || env.HOST_API || '';
     this._path = config.path || '';
-    this._headers = config.headers || defaultHeaders;
+    this._headers = config.headers || {};
   }
 
   private getPath() {

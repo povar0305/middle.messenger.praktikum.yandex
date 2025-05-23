@@ -233,7 +233,7 @@ h1 {
     gap: 0.5rem;
     align-items: center;
 
-    & svg {
+    & svg, & img {
       cursor: pointer;
       fill: $primary-bg;
       width: 80px;

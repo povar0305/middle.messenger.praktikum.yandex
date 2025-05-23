@@ -5,17 +5,17 @@ class UserApi extends Base {
     super({ path: '/user' });
   }
 
-  public updareProfile(data: { [key:string]:string} ) {
+  public updateProfile(data: { [key:string]:string} ) {
     return this.put('/profile', {
       data,
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      }
     });
   }
-  public updareProfileAvatar(data: FormData ) {
+  public updateProfileAvatar(data: FormData ) {
     return this.put('/profile/avatar', {
-      body: data,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+      data
     });
   }
 }

@@ -71,11 +71,11 @@ private _onRoute(pathname: string) {
 
   this._currentRoute = route;
 
-  route.render();
-
   if (!this._unprotectedPaths.includes(pathname as `/${string}`)) {
     this._onRouteCallback();
   }
+
+  route.render();
 }
 
 public onRoute(callback: () => void) {

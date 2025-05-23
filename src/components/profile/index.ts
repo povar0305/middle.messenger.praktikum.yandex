@@ -25,11 +25,12 @@ export default class Link extends Block {
     if (formElement.length) {
       formElement.forEach((element) => {
         const key = element.getAttribute('data-name');
-
         if (key && formData[key]) {
           element.textContent = formData[key];
         }
       });
     }
+
+
   }
 }

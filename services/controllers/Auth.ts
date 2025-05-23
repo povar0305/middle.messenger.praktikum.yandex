@@ -21,10 +21,8 @@ export interface IAuthApiSignUp {
 class AuthSingInController {
   public signIn(user: IAuthApiSignIn) {
     return auth.signIn(user)
-      .then(async () => {
-        if (store.state.currentUser) {
-          router.go('/messenger');
-        }
+      .then(() => {
+        router.go('/messenger');
       })
       .catch(handleError)
   }
