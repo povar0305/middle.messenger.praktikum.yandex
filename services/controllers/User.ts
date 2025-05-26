@@ -48,7 +48,7 @@ class UserController {
           this.updateAvatar(data)
         }
 
-        // router.go('/profile');
+        router.go('/profile');
       })
       .catch(handleError)
   }

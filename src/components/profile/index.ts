@@ -26,9 +26,10 @@ export default class Link extends Block {
     if (formElement.length) {
       formElement.forEach((element) => {
         const key = element.getAttribute('data-name');
+
         if (key && formData[key]) {
-          if ( key!= 'avatar') {
-            avatarElement.src = formData[key]
+          if ( key === 'avatar') {
+            avatarElement[0].src = 'https://ya-praktikum.tech/api/v2/resources/'+formData[key]
           } else {
             element.textContent = formData[key];
           }
