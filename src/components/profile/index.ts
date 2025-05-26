@@ -17,6 +17,7 @@ export default class Link extends Block {
 
   setFormValues(formData: Record<string, string>) {
     const formElement = this.getContent().querySelectorAll('[data-name]');
+    const avatarElement = this.getContent().querySelectorAll('img');
 
     if (!formElement) {
       return;
@@ -26,7 +27,11 @@ export default class Link extends Block {
       formElement.forEach((element) => {
         const key = element.getAttribute('data-name');
         if (key && formData[key]) {
-          element.textContent = formData[key];
+          if ( key!= 'avatar') {
+            avatarElement.src = formData[key]
+          } else {
+            element.textContent = formData[key];
+          }
         }
       });
     }
