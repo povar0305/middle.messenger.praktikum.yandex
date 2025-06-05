@@ -58,6 +58,15 @@ class ChatsController {
     return chats.addUserByChat(id)
       .catch(handleError)
   }
+
+  public getToken() {
+    return chats.getToken().then(({token})=> {
+      store.setState({
+        token,
+      });
+    })
+      .catch(handleError)
+  }
 }
 
 export default new ChatsController();

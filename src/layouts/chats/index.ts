@@ -1,4 +1,5 @@
 import { store } from "../../../store.ts";
+import { message } from "../../../message.ts";
 import { IUser } from "../../../services/controllers/User.ts";
 import Handlebars from "handlebars";
 
@@ -7,6 +8,7 @@ import tpl from './chats.ts'
 import chats from "../../../services/controllers/Chats.ts";
 import userChat from "../../components/user-chat/user-chat.ts";
 import usersList from "../../components/usersList/users-list.ts";
+
 
 const renderUsers = (users: IUser[] = [], searchUser: IUser[] = []) => {
   const wrapperChats = document.querySelector('.sp-chats__content--select')
@@ -34,8 +36,6 @@ export default class Base extends Block {
 
   handleChatClick = async (event: Event) => {
     if (event.target) {
-      event.preventDefault();
-
       if (event.target?.closest('.sp-user-chat')) {
         event.preventDefault();
 
@@ -52,6 +52,14 @@ export default class Base extends Block {
           store.setState({
             chatId: element.getAttribute('data-id'),
           });
+
+          await chats.getToken()
+
+          await message.connect({
+            userId: store.state.currentUser.id,
+            chatId: element.getAttribute('data-id'),
+            token: store.state.token,
+          })
         }
 
         return
@@ -119,6 +127,8 @@ export default class Base extends Block {
         }
 
         if (state.chatId) {
+          document.querySelector('.sp-chats__content--message').classList.add('show')
+
           document.querySelectorAll('.sp-user-chat').forEach((item) => {
             item.classList.remove('sp-user-chat--selected')
 
@@ -133,6 +143,10 @@ export default class Base extends Block {
         if (document.querySelector('.sp-chats__users')) {
           document.querySelector('.sp-chats__users').textContent = 'Ни одного чата не найдено'
         }
+      }
+
+      if (state.messages.length) {
+        console.log(state.messages)
       }
     });
   }

@@ -328,8 +328,11 @@ nav {
     &--message {
       background: $secondary-bg;
       padding: 16px;
-      display: flex;
       gap: 16px;
+      display: none;
+      &.show{
+        display: flex;
+      }
     }
 
     &--select {

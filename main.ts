@@ -598,6 +598,7 @@ const chatsTpl = new Chats(
         }, {});
 
         console.log('Отправлено сообщение.', formData);
+        // messageController.sendMessage(formData.message)
       },
     },
     message: [

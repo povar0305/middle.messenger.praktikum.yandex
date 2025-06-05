@@ -85,6 +85,16 @@ class ChatsApi extends Base {
       }
     });
   }
+  public getToken() {
+    return this.post(`/chats/token/${store.state.chatId}`, {
+      data: {
+        id: store.state.chatId
+      },
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      }
+    });
+  }
 }
 
 export default new ChatsApi();

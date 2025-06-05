@@ -18,6 +18,10 @@ const tpl = `
       </div>
       
       <form class="sp-chats__content--message">
+      <div class="sp-chats__content--messages">
+            
+      </div>
+      
         {{{message}}}
       </form>
     </div>
