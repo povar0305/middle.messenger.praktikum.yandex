@@ -4,7 +4,7 @@ import env from "../../utilits/env";
 
 interface IBaseApi {
   baseUrl?: string,
-  path?: `/${string}`
+  path?: `/${string}`|''
   headers?: Record<string, string>
 }
 

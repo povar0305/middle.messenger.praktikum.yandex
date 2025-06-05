@@ -49,8 +49,6 @@ class AuthSingInController {
           store.setState({
             currentUser: user,
           });
-
-
         })
         .catch((error) => {
           handleError(error);

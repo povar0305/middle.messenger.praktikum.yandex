@@ -9,7 +9,7 @@ export interface IUser {
   login: string
   email: string
   phone: string
-  password: string
+  password?: string
 }
 
 export interface IUserPass {

@@ -6,12 +6,16 @@ const tpl = `
       </div>
       
       <div class="sp-chats__users">
-        {{{list}}}      
+      
       </div>
     </div>
     
     <div class="sp-chats__content">
-      <span class="sp-chats__content--select">Выберите чат чтобы отправить сообщение</span>
+      <div class="sp-chats__content--select">
+        <p>
+          Выберите чат чтобы отправить сообщение
+        </p>
+      </div>
       
       <form class="sp-chats__content--message">
         {{{message}}}

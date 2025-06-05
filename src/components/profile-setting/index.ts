@@ -12,7 +12,6 @@ export default class Link extends Block {
     store.subscribe((state) => {
       this.setFormValues(state.currentUser);
     });
-
   }
 
   setFormValues(formData: Record<string, string>) {
@@ -24,9 +23,9 @@ export default class Link extends Block {
 
     if (formElementInputs.length) {
       formElementInputs.forEach((element) => {
-        const key = element.getAttribute('name');
+        const key = element.getAttribute('name') || 'name'
 
-        if (key && formData[key]) {
+        if (formData && key && formData[key]) {
           element.value = formData[key];
         }
       });

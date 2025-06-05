@@ -12,7 +12,6 @@ import Setting from "./src/components/profile-setting";
 import Input from './src/components/input'
 import Btn from './src/components/btn'
 import Header from './src/components/header';
-import UserChat from "./src/components/user-chat";
 
 import { validator } from "./utilits/validator";
 import { descroptionErrors } from "./utilits/descroptionErrors";
@@ -20,6 +19,7 @@ import { router } from './router';
 
 import auth from "./services/controllers/Auth";
 import user from "./services/controllers/User";
+import chats from "./services/controllers/Chats";
 
 //404
 const errorTpl404 = new Error(
@@ -586,78 +586,6 @@ const loginTpl = new Login(
 const chatsTpl = new Chats(
   'div',
   {
-    list: [
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      }),
-      new UserChat('div', {
-        date: '10:20',
-        message: 'wertj',
-        name: 'testName'
-      })
-    ],
     events: {
       submit: function (event) {
         event.preventDefault()
@@ -670,19 +598,15 @@ const chatsTpl = new Chats(
         }, {});
 
         console.log('Отправлено сообщение.', formData);
-
-        auth.signIn({
-          login: formData.login,
-          password: formData.password,
-        });
       },
     },
-    message: [new Input(
+    message: [
+      new Input(
       'div',
       {
         type: 'text',
         name: 'message',
-        placeholder: 'Поиск',
+        placeholder: 'Поиск 123',
         required: true,
         validator: 'message',
         attrs: {
@@ -737,10 +661,10 @@ const chatsTpl = new Chats(
           type: 'text',
           name: 'search',
           required: true,
-          placeholder: 'Поиск',
+          placeholder: 'Название чата',
           validator: 'message',
           events: {
-            blur: (el) => {
+            input: (el) => {
               el.preventDefault()
 
               const typeInput = el.target.getAttribute('data-validator')
@@ -753,6 +677,24 @@ const chatsTpl = new Chats(
                 el.target.classList.remove('sp-input_input--error')
                 el.target.nextElementSibling.textContent = null
               }
+            }
+          }
+        }
+      ),
+      new Btn(
+        'div',
+        {
+          attrs: {
+            class: ''
+          },
+          text: 'Создать',
+          type: 'button',
+          events: {
+            click: (el) => {
+              el.preventDefault()
+                if (document.querySelector('input[name="search"]').value) {
+                  chats.createChat(document.querySelector('input').value)
+                }
             }
           }
         }
