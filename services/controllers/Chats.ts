@@ -30,11 +30,21 @@ class ChatsController {
       })
       .catch(handleError)
   }
-  public getUsersInSelectedChat(selectedChatId: string|number) {
-    return chats.getUsers(selectedChatId)
-      .then((resp) => {
-        return resp
-      })
+
+  public deleteUserFromChat(userId:string) {
+    return chats.deleteUserFromChat(userId)
+      .catch(handleError)
+  }
+  public deleteChatById(chatId:string) {
+    return chats.deleteChat(chatId)
+      .catch(handleError)
+  }
+
+  public getUsersInSelectedChat() {
+    if (!store.state.chatId) {
+      return []
+    }
+    return chats.getUsers(store.state.chatId).then((r) => r)
       .catch(handleError)
   }
 }

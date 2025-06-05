@@ -1,6 +1,5 @@
 import Base from "./base";
-// import { IAuthApiSignIn, IAuthApiSignUp } from "../controllers/Auth";
-// import { IUserPass } from "../controllers/User";
+import {store} from "../../store.ts";
 
 class ChatsApi extends Base {
   constructor() {
@@ -47,6 +46,28 @@ class ChatsApi extends Base {
   }
   public getUsers(id:string|number) {
     return this.get(`/chats/${id}/users`, {
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      }
+    });
+  }
+
+  public deleteUserFromChat(id:string|number) {
+    return this.delete(`/chats/users`, {
+      data: {
+        users: [id],
+        chatId: store.state.chatId
+      },
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      }
+    });
+  }
+  public deleteChat(id:string|number) {
+    return this.delete(`/chats`, {
+      data: {
+        chatId: id
+      },
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       }
