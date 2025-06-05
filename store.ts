@@ -5,5 +5,5 @@ export const store = new Store({
   chatId: null,
   token: null,
   chats: [],
-  messages: [],
+  messages: []
 });

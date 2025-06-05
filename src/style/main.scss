@@ -360,6 +360,8 @@ nav {
   padding: 8px;
   transition: 200ms;
   border-radius: 0.75rem;
+  justify-content: space-between;
+  align-items: center;
 
   img {
     width: 50px;
@@ -429,5 +431,10 @@ nav {
 
   h3 {
     font-size: 16px;
+    flex: 1;
+  }
+
+  &>div {
+    width: 100%;
   }
 }

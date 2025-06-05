@@ -44,7 +44,18 @@ class ChatsController {
     if (!store.state.chatId) {
       return []
     }
-    return chats.getUsers(store.state.chatId).then((r) => r)
+    return chats.getUsers(store.state.chatId)
+      .catch(handleError)
+  }
+  public searchUsersByLogin(login:string) {
+    if (!login) {
+      return []
+    }
+    return chats.searchUsers(login)
+      .catch(handleError)
+  }
+  public addUserByChat(id:string) {
+    return chats.addUserByChat(id)
       .catch(handleError)
   }
 }

@@ -73,6 +73,18 @@ class ChatsApi extends Base {
       }
     });
   }
+
+  public addUserByChat(id:string|number) {
+    return this.put(`/chats/users`, {
+      data: {
+        users: [id],
+        chatId: store.state.chatId
+      },
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      }
+    });
+  }
 }
 
 export default new ChatsApi();
