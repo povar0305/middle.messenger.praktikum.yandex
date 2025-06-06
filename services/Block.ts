@@ -22,8 +22,7 @@ interface ParsedProps {
 interface AnyProps {
   [key: string]: Block|boolean|string|[]|object|Block[]|never|void;
 }
-
-class Block {
+export default class Block {
   private children: BlockProps;
   private lists: { [key: string]: Block[] | Block };
   private _meta: { tagName: string; props: AnyProps };
@@ -89,6 +88,7 @@ class Block {
   private _createResources(): void {
     const { tagName } = this._meta!;
     this._element = this._createDocumentElement(tagName);
+    this.dispatchComponentDidMount()
   }
 
   init(): void {
@@ -102,7 +102,6 @@ class Block {
     }
 
     const contextAndStubs = { ...context };
-
 
     Object.keys(this?.children).forEach((key) => {
       if (this?.children[key] instanceof Block) {
@@ -150,13 +149,13 @@ class Block {
     return fragment.content;
   }
 
-  private _componentDidMount(): void {
+  private _componentDidMount() {
     this.componentDidMount();
+    this.eventBus.emit(Block.EVENTS.FLOW_RENDER);
   }
 
-  componentDidMount(oldProps?: BlockProps): void {
-    console.log('componentDidMount',oldProps)
-  }
+  public componentDidMount() {}
+
 
   dispatchComponentDidMount(): void {
     this.eventBus.emit(Block.EVENTS.FLOW_CDM);
@@ -265,6 +264,11 @@ class Block {
       this.element.removeEventListener(eventName, event);
     });
   }
-}
 
-export default Block;
+  public destroy() {
+    this._element.remove();
+    this.onDestroy();
+  }
+
+  public onDestroy() {}
+}
