@@ -20,6 +20,7 @@ import { router } from './router';
 import auth from "./services/controllers/Auth";
 import user from "./services/controllers/User";
 import chats from "./services/controllers/Chats";
+import {message} from "./message";
 
 //404
 const errorTpl404 = new Error(
@@ -597,8 +598,8 @@ const chatsTpl = new Chats(
           return acc;
         }, {});
 
-        console.log('Отправлено сообщение.', formData);
-        // messageController.sendMessage(formData.message)
+        message.sendMessage(formData.message)
+        document.querySelector('input[name="message"]').value = ''
       },
     },
     message: [
@@ -607,7 +608,7 @@ const chatsTpl = new Chats(
       {
         type: 'text',
         name: 'message',
-        placeholder: 'Поиск 123',
+        placeholder: 'Сообщение',
         required: true,
         validator: 'message',
         attrs: {
