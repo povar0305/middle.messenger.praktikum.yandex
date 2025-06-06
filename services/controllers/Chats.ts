@@ -1,23 +1,14 @@
 import { handleError } from "../../utilits/apiHandler";
 import { store } from "../../store.ts";
 import chats from "../api/chats";
+import { TChats } from "../Store.ts";
 
 class ChatsController {
   public getChatsUser() {
     return chats.getChats()
-      .then((res) => {
+      .then((res:TChats) => {
         store.setState({
-          chats: res,
-        });
-      })
-      .catch(handleError)
-  }
-
-  public searchChats (query:string) {
-    return chats.searchChats(query)
-      .then((res) => {
-        store.setState({
-          chats: res,
+          chats: res || [],
         });
       })
       .catch(handleError)
@@ -26,7 +17,7 @@ class ChatsController {
   public createChat(title:string) {
     return chats.createChat(title)
       .then(() => {
-        this.getChatsUser()
+        this.getChatsUser().then(r => r)
       })
       .catch(handleError)
   }
@@ -44,7 +35,7 @@ class ChatsController {
     if (!store.state.chatId) {
       return []
     }
-    return chats.getUsers(store.state.chatId)
+    return chats.getUsers(store.state.chatId as string)
       .catch(handleError)
   }
   public searchUsersByLogin(login:string) {

@@ -1,15 +1,14 @@
-// router.ts
 import Route from './Route';
 import Block from "./Block";
 
 class Router {
-  public routes: Route[];
-  public history: History;
-  private _currentRoute: Route | null;
-  private _rootQuery: string;
-  private _pathnames: string[];
-  private _onRouteCallback: () => void;
-  private _unprotectedPaths: `/${string}`[];
+  public routes!: Route[];
+  public history!: History;
+  private _currentRoute!: Route | null;
+  private _rootQuery!: string;
+  private _pathnames!: string[];
+  private _onRouteCallback!: () => void;
+  private _unprotectedPaths!: `/${string}`[];
 
   static __instance: Router;
 
@@ -29,10 +28,6 @@ class Router {
     Router.__instance = this;
   }
 
-  get currentRoute() {
-    return this._currentRoute;
-  }
-
   public use(pathname: string, BlockClass: Block) {
     const route = new Route(pathname, BlockClass, { rootQuery: this._rootQuery });
     this.routes.push(route);
@@ -47,68 +42,61 @@ class Router {
     return pathname;
   }
 
-public start() {
-  window.onpopstate = () => {
+  public start() {
+    window.onpopstate = () => {
+      const pathname = this._hasRoute(window.location.pathname);
+      this._onRoute(pathname);
+    };
+
     const pathname = this._hasRoute(window.location.pathname);
     this._onRoute(pathname);
-  };
-
-  const pathname = this._hasRoute(window.location.pathname);
-  this._onRoute(pathname);
-}
-
-private _onRoute(pathname: string) {
-  const route = this.getRoute(pathname);
-
-  if (!route) {
-    console.warn(`Нет маршрута для ${pathname}`);
-    return;
   }
 
-  if (this._currentRoute) {
-    this._currentRoute.leave();
+  private _onRoute(pathname: string) {
+    const route = this.getRoute(pathname);
+
+    if (!route) {
+      console.warn(`Нет маршрута для ${pathname}`);
+      return;
+    }
+
+    if (this._currentRoute) {
+      this._currentRoute.leave();
+    }
+
+    this._currentRoute = route;
+
+    if (!this._unprotectedPaths.includes(pathname as `/${string}`)) {
+      this._onRouteCallback();
+    }
+
+    route.render();
   }
 
-  this._currentRoute = route;
-
-  if (!this._unprotectedPaths.includes(pathname as `/${string}`)) {
-    this._onRouteCallback();
+  public onRoute(callback: () => void) {
+    this._onRouteCallback = callback;
+    return this;
   }
 
-  route.render();
-}
+  public setUnprotectedPaths(paths: `/${string}`[]) {
+    this._unprotectedPaths = paths;
+    return this;
 
-public onRoute(callback: () => void) {
-  this._onRouteCallback = callback;
-  return this;
-}
+  }
 
-public setUnprotectedPaths(paths: `/${string}`[]) {
-  this._unprotectedPaths = paths;
-  return this;
+  public go(pathname: string) {
+    this.history.pushState({}, '', pathname);
+    this._onRoute(pathname);
+  }
 
-}
+  public back() {
+    this.history.back();
+  }
 
-public go(pathname: string) {
-  this.history.pushState({}, '', pathname);
-  this._onRoute(pathname);
-}
+  public getRoute(pathname: string): Route | undefined {
+    return this.routes.find((route) => route.match(pathname));
+  }
 
-public back() {
-  this.history.back();
-}
-
-public forward() {
-  this.history.forward();
-}
-
-public getRoute(pathname: string): Route | undefined {
-  return this.routes.find((route) => route.match(pathname));
-}
-
-public getLocationPathname(): string {
-  return window.location.pathname;
-}
 }
 
 export default Router;
