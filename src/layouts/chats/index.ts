@@ -139,7 +139,8 @@ export default class Base extends Block {
 
     chats.getChatsUser().then(r => r)
 
-    store.subscribe(async (state:TState) => {
+    store.subscribe((params:unknown) => {
+      const state = params as TState;
       const chatsList = state.chats.map((item) => {
         const isCanDelete = item.created_by === state?.currentUser.id as string
         return {...item, isCanDelete}
@@ -167,8 +168,13 @@ export default class Base extends Block {
             }
           })
         }
-        const users = await chats.getUsersInSelectedChat()
-        renderUsers(users)
+
+        (async () => {
+          // ваш асинхронный код
+          const users = await chats.getUsersInSelectedChat();
+          renderUsers(users);
+        })();
+
       } else {
         const wrapperUsers = document.querySelector('.sp-chats__users')
         if (wrapperUsers) {
