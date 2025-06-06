@@ -13,8 +13,9 @@ export default class Link extends Block {
   }
 
   componentDidMount() {
-    store.subscribe((state:TState) => {
-      this.setFormValues(state.currentUser as IUser);
+    store.subscribe((state) => {
+      const currentUser = state as TState;
+      this.setFormValues(currentUser.currentUser);
     });
 
   }
