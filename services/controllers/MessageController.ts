@@ -102,7 +102,7 @@ class MessageController {
   }
 
   public leave() {
-    clearInterval(this._ping as number);
+    clearInterval(this._ping as string);
     this._ws.close();
     this._removeEvents();
   }
