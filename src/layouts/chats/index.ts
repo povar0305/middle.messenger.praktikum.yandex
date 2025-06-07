@@ -23,27 +23,33 @@ const renderUsers = (users: IUser[] = [], searchUser: IUser[] = []) => {
 
 export default class Base extends Block {
   handleInput = async (event: Event) => {
-    if (event.target?.closest('.sp-chats__content--select')) {
-      const inputNewUser = document.querySelector('input[name="new-user"]')
+    const target = event.target as Element
+
+    if (target.closest('.sp-chats__content--select')) {
+      const inputNewUser = document.querySelector('input[name="new-user"]') as HTMLInputElement
       const searchResult = await chats.searchUsersByLogin(inputNewUser.value) || []
 
       const users = await chats.getUsersInSelectedChat() || []
       renderUsers(users, searchResult)
 
-      document.querySelector('input[name="new-user"]').value = inputNewUser.value || ''
-      document.querySelector('input[name="new-user"]').focus()
+      const newUserInput = document.querySelector('input[name="new-user"]') as HTMLInputElement
+      newUserInput.value = inputNewUser.value || ''
+      newUserInput.focus()
     }
   }
 
   handleChatClick = async (event: Event) => {
-    if (event.target) {
-      if (event.target?.closest('.sp-user-chat')) {
+    const target = event.target as Element
+
+    if (target) {
+      if (target?.closest('.sp-user-chat')) {
         event.preventDefault();
 
-        const element = event.target?.closest('.sp-user-chat')
+        const element = target?.closest('.sp-user-chat') as Element
 
-        if (event.target instanceof SVGElement) {
-          await chats.deleteChatById(element.getAttribute('data-id')).then(async () => {
+        if (target instanceof SVGElement) {
+          const selectedId = element.getAttribute('data-id') as string
+          await chats.deleteChatById(selectedId).then(async () => {
             store.setState({
               chatId: null,
             });
@@ -74,11 +80,11 @@ export default class Base extends Block {
         return
       }
 
-      if (event.target.closest('.sp-message--wrapper')) {
+      if (target.closest('.sp-message--wrapper')) {
         event.preventDefault();
 
-        const isWeNeedAddUser = event.target?.closest('.sp-message--users--searching')
-        const idUser = event.target.closest('.sp-message--wrapper').getAttribute('data-id')
+        const isWeNeedAddUser = target?.closest('.sp-message--users--searching')
+        const idUser = target.closest('.sp-message--wrapper').getAttribute('data-id')
         const usersInChat = await chats.getUsersInSelectedChat() || []
 
         if (idUser) {
@@ -103,8 +109,6 @@ export default class Base extends Block {
               })
             }
           }
-
-
 
           return
         }
