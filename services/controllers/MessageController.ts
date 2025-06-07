@@ -17,7 +17,7 @@ class MessageController {
   private _userId!: number|string|null;
   private _chatId!: number|string|null;
   private _token!: string|number|null;
-  private _ping!:unknown ;
+  private _ping!: NodeJS.Timeout;
 
   constructor() {
     this._handleOpen = this._handleOpen.bind(this);
@@ -109,7 +109,7 @@ class MessageController {
   }
 
   public leave() {
-    clearInterval(this._ping as string);
+    clearInterval(this._ping);
     this._ws.close();
     this._removeEvents();
   }
