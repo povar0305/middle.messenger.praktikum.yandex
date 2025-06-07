@@ -3,13 +3,13 @@ import Route from './Route';
 import Block from "./Block";
 
 class Router {
-  public routes: Route[];
-  public history: History;
-  private _currentRoute: Route | null;
-  private _rootQuery: string;
-  private _pathnames: string[];
-  private _onRouteCallback: () => void;
-  private _unprotectedPaths: `/${string}`[];
+  public routes!: Route[];
+  public history!: History;
+  private _currentRoute!: Route | null;
+  private _rootQuery!: string;
+  private _pathnames!: string[];
+  private _onRouteCallback!: () => void;
+  private _unprotectedPaths!: `/${string}`[];
 
   static __instance: Router;
 

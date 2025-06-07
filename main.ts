@@ -599,7 +599,8 @@ const chatsTpl = new Chats(
         }, {});
 
         message.sendMessage(formData.message)
-        document.querySelector('input[name="message"]').value = ''
+        const inputMessage = document.querySelector('input[name="message"]') as HTMLInputElement
+        inputMessage.value = ''
       },
     },
     message: [
@@ -694,8 +695,9 @@ const chatsTpl = new Chats(
           events: {
             click: (el) => {
               el.preventDefault()
-                if (document.querySelector('input[name="search"]').value) {
-                  chats.createChat(document.querySelector('input').value)
+              const inputSearch = document.querySelector('input[name="search"]') as HTMLInputElement
+                if (inputSearch.value) {
+                  chats.createChat(inputSearch.value)
                 }
             }
           }

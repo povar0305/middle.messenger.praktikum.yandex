@@ -1,6 +1,7 @@
 import Block from "../../../services/Block.ts";
 import tpl from './setting.ts'
 import { store } from "../../../store.ts";
+import {IUser} from "../../../services/controllers/User.ts";
 
 export default class Link extends Block {
 
@@ -10,11 +11,12 @@ export default class Link extends Block {
 
   componentDidMount() {
     store.subscribe((state) => {
-      this.setFormValues(state.currentUser);
+      const currentUser = state.curentUser  as IUser
+      this.setFormValues(currentUser);
     });
   }
 
-  setFormValues(formData: Record<string, string>) {
+  setFormValues(formData: IUser) {
     const formElementInputs = this.getContent().querySelectorAll('input');
 
     if (!formElementInputs) {

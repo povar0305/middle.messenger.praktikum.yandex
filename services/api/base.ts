@@ -28,7 +28,7 @@ class BaseApi {
   }
 
   private handleOptions(newOptions?: { [key:string] : unknown }) {
-    const options = newOptions;
+    const options = newOptions as { [key:string] : unknown };
     options.headers = newOptions?.headers || this._headers;
     return options;
   }
@@ -47,22 +47,22 @@ class BaseApi {
 
   get(endpoint: `/${string}`, options?: { [key:string] : unknown }) {
     return this._http.get(this.getPath() + endpoint, this.handleOptions(options))
-      .then(this.handleResponse);
+      .then((res: unknown) => this.handleResponse(res as XMLHttpRequest));
   }
 
   post(endpoint: `/${string}`, options?: { [key:string] : unknown }) {
     return this._http.post(this.getPath() + endpoint, this.handleOptions(options))
-      .then(this.handleResponse);
+      .then((res: unknown) => this.handleResponse(res as XMLHttpRequest));
   }
 
   put(endpoint: `/${string}`, options?: { [key:string] : unknown }) {
     return this._http.put(this.getPath() + endpoint, this.handleOptions(options))
-      .then(this.handleResponse);
+      .then((res: unknown) => this.handleResponse(res as XMLHttpRequest));
   }
 
   delete(endpoint: `/${string}`, options?: { [key:string] : unknown }) {
     return this._http.delete(this.getPath() + endpoint, this.handleOptions(options))
-      .then(this.handleResponse);
+      .then((res: unknown) => this.handleResponse(res as XMLHttpRequest));
   }
 }
 

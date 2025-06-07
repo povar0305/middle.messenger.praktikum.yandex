@@ -1,10 +1,25 @@
 import EventBus from './EventBus';
+import { IUser } from "./controllers/User.ts";
 
-export type TState = Record<string, unknown>;
+export type TState = {
+  currentUser?: IUser,
+  chatId?: string|number|null,
+  token?: string|number,
+  chats?: TChats[],
+  messages?: TMessage[],
+  [key:string]: unknown
+};
+export type TChats = {
+  [key:string]: unknown
+};
 
+export type TMessage = {
+  time: string
+  [key:string]: unknown,
+};
 class Store {
   public state: TState;
-  private subscribers: ((params:unknown)=> void)[];
+  private subscribers: ((params:TState)=> void)[];
   private _meta: {
     state: TState;
   };
@@ -18,7 +33,13 @@ class Store {
     FLOW_USE: 'flow:use',
   };
 
-  constructor(initialState: TState = {}) {
+  constructor(initialState: TState = {
+    currentUser: { } as IUser,
+    chatId: '',
+    token: '',
+    chats: [],
+    messages: []
+  }) {
     const eventBus = new EventBus();
 
     this._meta = {
@@ -49,7 +70,7 @@ class Store {
 
   public storeDidMount() {}
 
-  private _storeDidUpdate(oldState: TState, newState: TState) {
+  private _storeDidUpdate(oldState?: TState, newState?: TState) {
     const response = this.storeDidUpdate(oldState, newState);
     if (response) {
       this.eventBus().emit(Store.EVENTS.FLOW_USE);

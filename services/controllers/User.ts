@@ -10,6 +10,7 @@ export interface IUser {
   email: string
   phone: string
   password?: string
+  id?: string
 }
 
 export interface IUserPass {
@@ -38,9 +39,9 @@ class UserController {
   public updateInfo(userData: {[key:string]:string}) {
     return user.updateProfile(userData)
       .then(() => {
-        const inputFile = document.querySelector('input[type="file"]');
+        const inputFile = document.querySelector('input[type="file"]') as HTMLInputElement;
 
-        if (inputFile.files[0]) {
+        if (inputFile.files && inputFile.files[0]) {
 
           const data = new FormData()
           data.append('avatar', inputFile.files[0])

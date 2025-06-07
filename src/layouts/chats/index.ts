@@ -9,6 +9,7 @@ import chats from "../../../services/controllers/Chats.ts";
 import userChat from "../../components/user-chat/user-chat.ts";
 import usersList from "../../components/usersList/users-list.ts";
 import messages from "../../components/messages/messages.ts"
+import {TChats, TMessage, TState} from "../../../services/Store.ts";
 
 
 const renderUsers = (users: IUser[] = [], searchUser: IUser[] = []) => {
@@ -69,10 +70,13 @@ export default class Base extends Block {
           });
 
           await chats.getToken().then(async () => {
+            const currentUser = store.state.currentUser as IUser
+            const chatId = element.getAttribute('data-id') as string
+            const token = store.state.token as string
             await message.connect({
-              userId: store.state.currentUser.id,
-              chatId: element.getAttribute('data-id'),
-              token: store.state.token,
+              userId: currentUser.id as string,
+              chatId,
+              token,
             })
           })
         }
@@ -83,8 +87,9 @@ export default class Base extends Block {
       if (target.closest('.sp-message--wrapper')) {
         event.preventDefault();
 
-        const isWeNeedAddUser = target?.closest('.sp-message--users--searching')
-        const idUser = target.closest('.sp-message--wrapper').getAttribute('data-id')
+        const isWeNeedAddUser = target?.closest('.sp-message--users--searching') as Element
+        const targetMessageWrapper = target.closest('.sp-message--wrapper') as Element
+        const idUser = targetMessageWrapper.getAttribute('data-id') as string
         const usersInChat = await chats.getUsersInSelectedChat() || []
 
         if (idUser) {
@@ -95,7 +100,8 @@ export default class Base extends Block {
             renderUsers(users)
           } else {
             if (usersInChat.length === 1 ) {
-              await chats.deleteChatById(store.state.chatId).then(async () => {
+              const chatId = store.state.chatId as string
+              await chats.deleteChatById(chatId).then(async () => {
                 store.setState({
                   chatId: null,
                 });
@@ -131,72 +137,78 @@ export default class Base extends Block {
 
     chats.getChatsUser()
 
-    store.subscribe(async (state:{[key:string]:unknown}) => {
-      const chatsList = state.chats.map((item) => {
-        item.isCanDelete = item.created_by === state?.currentUser.id
-        return item
-      })
+    store.subscribe(async (state:TState) => {
+      if (state.currentUser) {
+        const currentUserId = state.currentUser.id as string
+        const chatsUsers = state.chats as TChats[]
 
-      const tpl = Handlebars.compile(userChat)({chats: chatsList})
-      if (chatsList.length) {
-        const wrapperChats = document.querySelector('.sp-chats__users')
-        if (wrapperChats) {
-          wrapperChats.innerHTML = tpl
-        }
+        const chatsList = chatsUsers.map((item:TChats) => {
+          item.isCanDelete = item.created_by === currentUserId
+          return item
+        })
 
-        if (state.chatId) {
-          const wrapperChats = document.querySelector('.sp-chats__content--message')
-
+        const tpl = Handlebars.compile(userChat)({chats: chatsList})
+        if (chatsList.length) {
+          const wrapperChats = document.querySelector('.sp-chats__users')
           if (wrapperChats) {
-            wrapperChats.classList.add('show')
+            wrapperChats.innerHTML = tpl
           }
 
-          document.querySelectorAll('.sp-user-chat').forEach((item) => {
-            item.classList.remove('sp-user-chat--selected')
+          if (state.chatId) {
+            const wrapperChats = document.querySelector('.sp-chats__content--message')
 
-            if (item.getAttribute('data-id') === state.chatId) {
-              item.classList.add('sp-user-chat--selected')
+            if (wrapperChats) {
+              wrapperChats.classList.add('show')
             }
-          })
+
+            document.querySelectorAll('.sp-user-chat').forEach((item) => {
+              item.classList.remove('sp-user-chat--selected')
+
+              if (item.getAttribute('data-id') === state.chatId) {
+                item.classList.add('sp-user-chat--selected')
+              }
+            })
+          }
+          const users = await chats.getUsersInSelectedChat()
+          renderUsers(users)
+        } else {
+          const wrapperUsers = document.querySelector('.sp-chats__users')
+          if (wrapperUsers) {
+            wrapperUsers.textContent = 'Ни одного чата не найдено'
+          }
         }
-        const users = await chats.getUsersInSelectedChat()
-        renderUsers(users)
-      } else {
-        const wrapperUsers = document.querySelector('.sp-chats__users')
-        if (wrapperUsers) {
-          wrapperUsers.textContent = 'Ни одного чата не найдено'
+
+        const today = new Date();
+        const todayYear = today.getFullYear();
+        const todayMonth = today.getMonth() + 1; // Месяцы с 0 по 11, поэтому добавляем 1
+        const todayDate = today.getDate();
+
+        const messagesUsers = state.messages as TMessage[]
+        const messagesData = messagesUsers.map((item) => {
+          const msgDate = new Date(item.time as string);
+          const hours = msgDate.getHours();
+          const minutes = msgDate.getMinutes();
+
+          const day = msgDate.getDate();
+          const month = msgDate.getMonth() + 1; // Месяцы с 0 по 11, поэтому добавляем 1
+          const year = msgDate.getFullYear();
+
+          const formattedDay = day.toString().padStart(2, '0');
+          const formattedMonth = month.toString().padStart(2, '0');
+
+          item.isMyMessage = (item.user_id == currentUserId) || false
+          item.isShowDate = !(year === todayYear && month === todayMonth && day === todayDate);
+          item.formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+          item.formattedDate = `${formattedDay}.${formattedMonth}.${year}`;
+
+          return item
+        }).sort((a:TMessage, b:TMessage) => new Date(a.time as string).getTime() - new Date(b.time as string).getTime());
+
+        const tplMessages = Handlebars.compile(messages)({messages: messagesData})
+        const wrapperChats = document.querySelector('.sp-chats__content--messages')
+        if (wrapperChats) {
+          wrapperChats.innerHTML = tplMessages
         }
-      }
-
-      const today = new Date();
-      const todayYear = today.getFullYear();
-      const todayMonth = today.getMonth() + 1; // Месяцы с 0 по 11, поэтому добавляем 1
-      const todayDate = today.getDate();
-
-      const messagesData = state.messages.map((item) => {
-        const msgDate = new Date(item.time);
-        const hours = msgDate.getHours();
-        const minutes = msgDate.getMinutes();
-
-        const day = msgDate.getDate();
-        const month = msgDate.getMonth() + 1; // Месяцы с 0 по 11, поэтому добавляем 1
-        const year = msgDate.getFullYear();
-
-        const formattedDay = day.toString().padStart(2, '0');
-        const formattedMonth = month.toString().padStart(2, '0');
-
-        item.isMyMessage = (item.user_id == state?.currentUser.id) || false
-        item.isShowDate = !(year === todayYear && month === todayMonth && day === todayDate);
-        item.formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-        item.formattedDate = `${formattedDay}.${formattedMonth}.${year}`;
-
-        return item
-      }).sort((a:{time:string}, b:{time:string}) => new Date(a.time).getTime() - new Date(b.time).getTime());
-
-      const tplMessages = Handlebars.compile(messages)({messages: messagesData})
-      const wrapperChats = document.querySelector('.sp-chats__content--messages')
-      if (wrapperChats) {
-        wrapperChats.innerHTML = tplMessages
       }
     });
   }
