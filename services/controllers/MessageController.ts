@@ -1,9 +1,9 @@
 import env from "../../utilits/env.ts";
-import { store } from "../../store.ts";
+import {store} from "../../store.ts";
 
 export interface IMessageWebSocketConnect {
-  userId: number | string
-  chatId: number | string
+  userId: number
+  chatId: number
   token: string
 }
 
@@ -12,10 +12,10 @@ export interface IMessageWebSocketGet {
 }
 
 class MessageController {
-  private _ws!: WebSocket;
-  private _userId!: number|string;
-  private _chatId!: number|string;
-  private _token!: string;
+  private _ws: WebSocket;
+  private _userId: number;
+  private _chatId: number;
+  private _token: string;
   private _ping: unknown;
 
   constructor() {
@@ -28,14 +28,14 @@ class MessageController {
   private _addEvents() {
     this._ws.addEventListener('open', this._handleOpen);
     this._ws.addEventListener('message', this._handleMassage);
-    this._ws.addEventListener('error', (ev: Event) => this._handleError(ev as ErrorEvent));
+    this._ws.addEventListener('error', this._handleError);
     this._ws.addEventListener('close', this._handleClose);
   }
 
   private _removeEvents() {
     this._ws.removeEventListener('open', this._handleOpen);
     this._ws.removeEventListener('message', this._handleMassage);
-    this._ws.removeEventListener('error', (ev: Event) => this._handleError(ev as ErrorEvent));
+    this._ws.removeEventListener('error', this._handleError);
     this._ws.removeEventListener('close', this._handleClose);
   }
 
@@ -67,8 +67,7 @@ class MessageController {
   }
 
   private _handleError(evt: ErrorEvent) {
-    const errorEvt = evt as ErrorEvent;
-    console.log('💬 _handleError', errorEvt.message);
+    console.log('💬 _handleError', evt.message);
   }
 
   private _handleClose(evt: CloseEventInit) {
@@ -102,7 +101,7 @@ class MessageController {
   }
 
   public leave() {
-    clearInterval(this._ping as string);
+    clearInterval(this._ping);
     this._ws.close();
     this._removeEvents();
   }

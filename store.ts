@@ -2,7 +2,7 @@ import Store from './services/Store';
 
 export const store = new Store({
   currentUser: {
-    id: ''
+    id: null
   },
   chatId: null,
   token: null,

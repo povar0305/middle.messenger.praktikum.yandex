@@ -1,10 +1,7 @@
-import { IUser } from "../../../services/controllers/User.ts";
-import { TState } from "../../../services/Store.ts";
-
 import Block from "../../../services/Block.ts";
-import { store } from "../../../store.ts";
-
 import tpl from './profile.ts'
+import { store } from "../../../store.ts";
+import { IUser } from "../../../services/controllers/User.ts";
 
 export default class Link extends Block {
 
@@ -13,8 +10,8 @@ export default class Link extends Block {
   }
 
   componentDidMount() {
-    store.subscribe((state:TState) => {
-      this.setFormValues(state.currentUser as IUser);
+    store.subscribe((state) => {
+      this.setFormValues(state.currentUser);
     });
 
   }
@@ -28,15 +25,14 @@ export default class Link extends Block {
     }
 
     if (formElement.length) {
-      formElement.forEach((element:Element) => {
-        const key = element.getAttribute('data-name') as string;
-        const value = formData[key] as string
+      formElement.forEach((element) => {
+        const key = element.getAttribute('data-name');
 
-        if (formData && key && value) {
+        if (formData && key && formData[key]) {
           if ( key === 'avatar') {
-            avatarElement[0].src = 'https://ya-praktikum.tech/api/v2/resources/'+ value
+            avatarElement[0].src = 'https://ya-praktikum.tech/api/v2/resources/'+formData[key]
           } else {
-            element.textContent = value;
+            element.textContent = formData[key];
           }
         }
       });

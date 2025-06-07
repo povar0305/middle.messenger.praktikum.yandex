@@ -1,6 +1,5 @@
 import { router } from "../../router";
 import { handleError } from "../../utilits/apiHandler";
-
 import auth from "../api/auth";
 import user from "../api/user";
 
@@ -11,7 +10,6 @@ export interface IUser {
   email: string
   phone: string
   password?: string
-  [key: string]: unknown
 }
 
 export interface IUserPass {
@@ -42,12 +40,12 @@ class UserController {
       .then(() => {
         const inputFile = document.querySelector('input[type="file"]');
 
-        if (inputFile && inputFile instanceof HTMLInputElement && inputFile.files && inputFile.files[0]) {
+        if (inputFile.files[0]) {
 
           const data = new FormData()
           data.append('avatar', inputFile.files[0])
 
-          this.updateAvatar(data).then(r => r)
+          this.updateAvatar(data)
         }
 
         router.go('/profile');

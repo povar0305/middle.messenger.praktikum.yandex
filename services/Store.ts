@@ -1,23 +1,6 @@
 import EventBus from './EventBus';
-import { IUser } from "./controllers/User.ts";
 
-export type TState = {
-  currentUser: IUser,
-  chatId: string|number|null,
-  token: string|number,
-  chats: TChats[],
-  messages: TMessage[],
-  [key:string]: unknown
-};
-
-export type TChats = {
-  [key:string]: unknown
-};
-
-export type TMessage = {
-  time: unknown
-  [key:string]: unknown,
-};
+export type TState = Record<string, unknown>;
 
 class Store {
   public state: TState;
@@ -35,13 +18,7 @@ class Store {
     FLOW_USE: 'flow:use',
   };
 
-  constructor(initialState: TState = {
-    currentUser: { } as IUser,
-    chatId: '',
-    token: '',
-    chats: [],
-    messages: []
-  }) {
+  constructor(initialState: TState = {}) {
     const eventBus = new EventBus();
 
     this._meta = {
@@ -58,7 +35,7 @@ class Store {
   private _registerLifecycleEvents(eventBus: EventBus) {
     eventBus.on(Store.EVENTS.INIT, this._init.bind(this));
     eventBus.on(Store.EVENTS.FLOW_SDM, this._storeDidMount.bind(this));
-    eventBus.on(Store.EVENTS.FLOW_SDU, this._storeDidUpdateWrapper);
+    eventBus.on(Store.EVENTS.FLOW_SDU, this._storeDidUpdate.bind(this));
     eventBus.on(Store.EVENTS.FLOW_USE, this._use.bind(this));
   }
 
@@ -71,13 +48,6 @@ class Store {
   }
 
   public storeDidMount() {}
-
-  private _storeDidUpdateWrapper = (args: unknown) => {
-    if (Array.isArray(args) && args.length === 2) {
-      const [oldState, newState] = args;
-      this._storeDidUpdate(oldState as TState, newState as TState);
-    }
-  };
 
   private _storeDidUpdate(oldState: TState, newState: TState) {
     const response = this.storeDidUpdate(oldState, newState);
@@ -96,15 +66,12 @@ class Store {
     });
   }
 
-  public subscribe(subscriber: ((params: unknown) => void)) {
+  public subscribe(subscriber: (state: TState) => void) {
     this.subscribers.push((subscriber));
     subscriber(this.state);
   }
 
-  public setState(nextState: {
-    [key:string]: unknown
-  }
-  ) {
+  public setState(nextState: TState) {
     if (!nextState) {
       return;
     }
@@ -113,17 +80,13 @@ class Store {
 
   private _makeStateProxy(state: TState) {
     return new Proxy(state, {
-      set: (target: TState, p: string | symbol, value: unknown): boolean => {
-        if (typeof p === 'string') {
-
-          (target)[p] = value;
-          this._meta.state = this.state;
-          this.eventBus().emit(Store.EVENTS.FLOW_SDU, { oldState: this._meta.state, newState: target });
-          return true;
-        }
-        return false;
+      set: (target: TState, item: string, value: unknown) => {
+        target[item] = value;
+        this._meta.state = this.state;
+        this.eventBus().emit(Store.EVENTS.FLOW_SDU, this._meta.state, target);
+        return true;
       },
-      deleteProperty() {
+      deleteProperty: () => {
         throw new Error('Нет доступа');
       },
     });

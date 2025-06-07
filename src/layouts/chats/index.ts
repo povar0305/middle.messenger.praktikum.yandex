@@ -1,12 +1,9 @@
 import { store } from "../../../store.ts";
 import { message } from "../../../message.ts";
-import { TMessage, TState } from "../../../services/Store.ts";
 import { IUser } from "../../../services/controllers/User.ts";
-
 import Handlebars from "handlebars";
 
 import Block from "../../../services/Block.ts";
-
 import tpl from './chats.ts'
 import chats from "../../../services/controllers/Chats.ts";
 import userChat from "../../components/user-chat/user-chat.ts";
@@ -26,73 +23,62 @@ const renderUsers = (users: IUser[] = [], searchUser: IUser[] = []) => {
 
 export default class Base extends Block {
   handleInput = async (event: Event) => {
-    const target = event.target as Element
-    if (target.closest('.sp-chats__content--select')) {
-      const inputNewUser = document.querySelector('input[name="new-user"]') as HTMLInputElement
-      if (inputNewUser) {
-        const searchResult = await chats.searchUsersByLogin(inputNewUser.value) || []
-        const users = await chats.getUsersInSelectedChat() || []
-        renderUsers(users, searchResult)
+    if (event.target?.closest('.sp-chats__content--select')) {
+      const inputNewUser = document.querySelector('input[name="new-user"]')
+      const searchResult = await chats.searchUsersByLogin(inputNewUser.value) || []
 
-        const newUserInput = document.querySelector('input[name="new-user"]') as HTMLInputElement
-        if (newUserInput) {
-          newUserInput.value = inputNewUser.value || ''
-          newUserInput.focus()
-        }
-      }
+      const users = await chats.getUsersInSelectedChat() || []
+      renderUsers(users, searchResult)
+
+      document.querySelector('input[name="new-user"]').value = inputNewUser.value || ''
+      document.querySelector('input[name="new-user"]').focus()
     }
   }
 
   handleChatClick = async (event: Event) => {
-    const target = event.target as Element
-
-    if (target) {
-      if (target.closest('.sp-user-chat')) {
+    if (event.target) {
+      if (event.target?.closest('.sp-user-chat')) {
         event.preventDefault();
 
-        const element = target.closest('.sp-user-chat')
-        if (element) {
-          if (event.target instanceof SVGElement) {
-            const selectedUserId = element.getAttribute('data-id')
-            if (selectedUserId) {
-              await chats.deleteChatById(selectedUserId).then(async () => {
-                store.setState({
-                  chatId: null,
-                });
-                store.setState({
-                  messages: []
-                });
+        const element = event.target?.closest('.sp-user-chat')
 
-                await chats.getChatsUser()
-              })
-            }
-          } else {
+        if (event.target instanceof SVGElement) {
+          await chats.deleteChatById(element.getAttribute('data-id')).then(async () => {
             store.setState({
-              chatId: element.getAttribute('data-id'),
+              chatId: null,
+            });
+            store.setState({
               messages: []
             });
 
-            await chats.getToken().then(async () => {
-              await message.connect({
-                userId: store.state.currentUser?.id as string,
-                chatId: element.getAttribute('data-id') as string,
-                token: store.state.token as string,
-              })
-            })
-          }
-        }
+            await chats.getChatsUser()
+          })
+        } else {
+          store.setState({
+            chatId: element.getAttribute('data-id'),
+          });
 
+          store.setState({
+            messages: []
+          });
+
+          await chats.getToken().then(async () => {
+            await message.connect({
+              userId: store.state.currentUser.id,
+              chatId: element.getAttribute('data-id'),
+              token: store.state.token,
+            })
+          })
+        }
 
         return
       }
 
-      const targetMessageWrapper = event.target as Element
-      if (targetMessageWrapper.closest('.sp-message--wrapper')) {
+      if (event.target.closest('.sp-message--wrapper')) {
         event.preventDefault();
 
-        const isWeNeedAddUser = targetMessageWrapper.closest('.sp-message--users--searching')
-        const messageWrapper = targetMessageWrapper.closest('.sp-message--wrapper') as Element
-        const idUser = messageWrapper.getAttribute('data-id')
+        const isWeNeedAddUser = event.target?.closest('.sp-message--users--searching')
+        const idUser = event.target.closest('.sp-message--wrapper').getAttribute('data-id')
         const usersInChat = await chats.getUsersInSelectedChat() || []
 
         if (idUser) {
@@ -103,9 +89,9 @@ export default class Base extends Block {
             renderUsers(users)
           } else {
             if (usersInChat.length === 1 ) {
-              await chats.deleteChatById(store.state.chatId as string).then(async () => {
+              await chats.deleteChatById(store.state.chatId).then(async () => {
                 store.setState({
-                  chatId: ''
+                  chatId: null,
                 });
               })
             } else {
@@ -117,6 +103,8 @@ export default class Base extends Block {
               })
             }
           }
+
+
 
           return
         }
@@ -130,19 +118,19 @@ export default class Base extends Block {
 
   componentDidMount() {
     document.addEventListener('click', (event) => {
-      this.handleChatClick(event).then(r => r)
+      this.handleChatClick(event)
     })
 
     document.addEventListener('input', (event) => {
-      this.handleInput(event as Event).then(r => r)
+      this.handleInput(event as Event)
     })
 
-    chats.getChatsUser().then(r => r)
+    chats.getChatsUser()
 
-    store.subscribe(async (state:TState) => {
+    store.subscribe(async (state:{[key:string]:unknown}) => {
       const chatsList = state.chats.map((item) => {
-        const isCanDelete = item.created_by === state?.currentUser.id as string
-        return {...item, isCanDelete}
+        item.isCanDelete = item.created_by === state?.currentUser.id
+        return item
       })
 
       const tpl = Handlebars.compile(userChat)({chats: chatsList})
@@ -181,8 +169,8 @@ export default class Base extends Block {
       const todayMonth = today.getMonth() + 1; // Месяцы с 0 по 11, поэтому добавляем 1
       const todayDate = today.getDate();
 
-      const messagesData = state.messages.map((item:TMessage) => {
-        const msgDate = new Date(item.time as string);
+      const messagesData = state.messages.map((item) => {
+        const msgDate = new Date(item.time);
         const hours = msgDate.getHours();
         const minutes = msgDate.getMinutes();
 
@@ -199,7 +187,7 @@ export default class Base extends Block {
         item.formattedDate = `${formattedDay}.${formattedMonth}.${year}`;
 
         return item
-      }).sort((a, b) => new Date(a.time as string).getTime() - new Date(b.time as string).getTime());
+      }).sort((a:{time:string}, b:{time:string}) => new Date(a.time).getTime() - new Date(b.time).getTime());
 
       const tplMessages = Handlebars.compile(messages)({messages: messagesData})
       const wrapperChats = document.querySelector('.sp-chats__content--messages')
