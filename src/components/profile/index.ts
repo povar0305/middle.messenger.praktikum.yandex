@@ -1,22 +1,21 @@
 import Block from "../../../services/Block.ts";
 import tpl from './profile.ts'
 import { store } from "../../../store.ts";
-import { IUser } from "../../../services/controllers/User.ts";
 
 export default class Link extends Block {
-
   render() {
     return this.compile(tpl);
   }
 
   componentDidMount() {
     store.subscribe((state) => {
-      this.setFormValues(state.currentUser as IUser);
+      const currentUser = state.curentUser  as { [key: string]: string }
+      this.setFormValues(currentUser);
     });
 
   }
 
-  setFormValues(formData: IUser) {
+  setFormValues(formData: { [key: string]: string }) {
     const formElement = this.getContent().querySelectorAll('[data-name]');
     const avatarElement = this.getContent().querySelectorAll('img');
 
@@ -27,9 +26,10 @@ export default class Link extends Block {
     if (formElement.length) {
       formElement.forEach((element:Element) => {
         const key = element.getAttribute('data-name') as string;
-        const value = formData[key] as string
+        const data = formData as { [key: string]: string };
+        const value = data[key] as string
 
-        if (formData && key && formData[key]) {
+        if (formData && key && data[key]) {
           if ( key === 'avatar') {
             avatarElement[0].src = 'https://ya-praktikum.tech/api/v2/resources/'+ value
           } else {
