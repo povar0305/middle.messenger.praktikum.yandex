@@ -2,26 +2,24 @@ import EventBus from './EventBus';
 import { IUser } from "./controllers/User.ts";
 
 export type TState = {
-  currentUser: IUser,
-  chatId: string|number|null,
-  token: string|number,
-  chats: TChats[],
-  messages: TMessage[],
+  currentUser?: IUser,
+  chatId?: string|number|null,
+  token?: string|number,
+  chats?: TChats[],
+  messages?: TMessage[],
   [key:string]: unknown
 };
-
 export type TChats = {
   [key:string]: unknown
 };
 
 export type TMessage = {
-  time: unknown
+  time: string
   [key:string]: unknown,
 };
-
 class Store {
   public state: TState;
-  private subscribers: ((params:unknown)=> void)[];
+  private subscribers: ((params:TState)=> void)[];
   private _meta: {
     state: TState;
   };
@@ -58,7 +56,7 @@ class Store {
   private _registerLifecycleEvents(eventBus: EventBus) {
     eventBus.on(Store.EVENTS.INIT, this._init.bind(this));
     eventBus.on(Store.EVENTS.FLOW_SDM, this._storeDidMount.bind(this));
-    eventBus.on(Store.EVENTS.FLOW_SDU, this._storeDidUpdateWrapper);
+    eventBus.on(Store.EVENTS.FLOW_SDU, this._callbackWrapper);
     eventBus.on(Store.EVENTS.FLOW_USE, this._use.bind(this));
   }
 
@@ -72,14 +70,21 @@ class Store {
 
   public storeDidMount() {}
 
-  private _storeDidUpdateWrapper = (args: unknown) => {
-    if (Array.isArray(args) && args.length === 2) {
-      const [oldState, newState] = args;
-      this._storeDidUpdate(oldState as TState, newState as TState);
+  private _callbackWrapper = (...args: unknown[]) => {
+    let oldState: TState | undefined;
+    let newState: TState | undefined;
+
+    if (args.length === 1) {
+      newState = args[0] as TState;
+    } else if (args.length >= 2) {
+      oldState = args[0] as TState;
+      newState = args[1] as TState;
     }
+
+    this._storeDidUpdate(oldState, newState);
   };
 
-  private _storeDidUpdate(oldState: TState, newState: TState) {
+  private _storeDidUpdate(oldState?: TState, newState?: TState) {
     const response = this.storeDidUpdate(oldState, newState);
     if (response) {
       this.eventBus().emit(Store.EVENTS.FLOW_USE);
@@ -96,15 +101,12 @@ class Store {
     });
   }
 
-  public subscribe(subscriber: ((params: unknown) => void)) {
+  public subscribe(subscriber: (state: TState) => void) {
     this.subscribers.push((subscriber));
     subscriber(this.state);
   }
 
-  public setState(nextState: {
-    [key:string]: unknown
-  }
-  ) {
+  public setState(nextState: TState) {
     if (!nextState) {
       return;
     }
@@ -113,17 +115,13 @@ class Store {
 
   private _makeStateProxy(state: TState) {
     return new Proxy(state, {
-      set: (target: TState, p: string | symbol, value: unknown): boolean => {
-        if (typeof p === 'string') {
-
-          (target)[p] = value;
-          this._meta.state = this.state;
-          this.eventBus().emit(Store.EVENTS.FLOW_SDU, { oldState: this._meta.state, newState: target });
-          return true;
-        }
-        return false;
+      set: (target: TState, item: string, value: unknown) => {
+        target[item] = value;
+        this._meta.state = this.state;
+        this.eventBus().emit(Store.EVENTS.FLOW_SDU, this._meta.state, target);
+        return true;
       },
-      deleteProperty() {
+      deleteProperty: () => {
         throw new Error('Нет доступа');
       },
     });
