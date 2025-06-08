@@ -1,7 +1,6 @@
 import Block from "../../../services/Block.ts";
 import tpl from './profile.ts'
 import { store } from "../../../store.ts";
-import { IUser } from "../../../services/controllers/User.ts";
 
 export default class Link extends Block {
 
@@ -11,12 +10,15 @@ export default class Link extends Block {
 
   componentDidMount() {
     store.subscribe((state) => {
-      this.setFormValues(state.currentUser as IUser);
+      const currentUser = state.currentUser as { [key: string]: unknown } | undefined;
+      if (currentUser) {
+        this.setFormValues(currentUser);
+      }
     });
 
   }
 
-  setFormValues(formData: IUser) {
+  setFormValues(formData: { [key:string]: unknown }) {
     const formElement = this.getContent().querySelectorAll('[data-name]');
     const avatarElement = this.getContent().querySelectorAll('img');
 
