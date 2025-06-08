@@ -1,4 +1,4 @@
-import Block from "./Block";
+import Block from "../services/Block";
 
 export default function renderDom(query:string, component: Block) {
   const root = document.querySelector(query)
