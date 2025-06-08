@@ -56,7 +56,7 @@ class Store {
   private _registerLifecycleEvents(eventBus: EventBus) {
     eventBus.on(Store.EVENTS.INIT, this._init.bind(this));
     eventBus.on(Store.EVENTS.FLOW_SDM, this._storeDidMount.bind(this));
-    eventBus.on(Store.EVENTS.FLOW_SDU, this._storeDidUpdate.bind(this));
+    eventBus.on(Store.EVENTS.FLOW_SDU, this._callbackWrapper);
     eventBus.on(Store.EVENTS.FLOW_USE, this._use.bind(this));
   }
 
@@ -69,6 +69,20 @@ class Store {
   }
 
   public storeDidMount() {}
+
+  private _callbackWrapper = (...args: unknown[]) => {
+    let oldState: TState | undefined;
+    let newState: TState | undefined;
+
+    if (args.length === 1) {
+      newState = args[0] as TState;
+    } else if (args.length >= 2) {
+      oldState = args[0] as TState;
+      newState = args[1] as TState;
+    }
+
+    this._storeDidUpdate(oldState, newState);
+  };
 
   private _storeDidUpdate(oldState?: TState, newState?: TState) {
     const response = this.storeDidUpdate(oldState, newState);
