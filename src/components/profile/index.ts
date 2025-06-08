@@ -3,7 +3,6 @@ import tpl from './profile.ts'
 import { store } from "../../../store.ts";
 
 export default class Link extends Block {
-
   render() {
     return this.compile(tpl);
   }
@@ -15,7 +14,6 @@ export default class Link extends Block {
         this.setFormValues(currentUser);
       }
     });
-
   }
 
   setFormValues(formData: { [key:string]: unknown }) {
