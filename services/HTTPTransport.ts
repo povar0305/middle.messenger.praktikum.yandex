@@ -22,7 +22,7 @@ function queryStringify(data: TRequestData) {
   }, '?');
 }
 
-class Http {
+class HTTPTransport {
   public get = (url: string, options = {}) => {
     return this.request(url, { ...options, method: METHODS.GET });
   };
@@ -56,8 +56,9 @@ class Http {
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-
       xhr.open(method, url + query);
+
+      xhr.withCredentials = true;
 
       Object.entries(headers).forEach(([key, value]) => {
         xhr.setRequestHeader(key, value);
@@ -76,7 +77,9 @@ class Http {
       xhr.timeout = timeout;
       xhr.ontimeout = reject;
 
-      if (method === METHODS.GET || !data) {
+      if (data instanceof FormData) {
+        xhr.send(data);
+      } else if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
         xhr.send(JSON.stringify(data));
@@ -85,4 +88,4 @@ class Http {
   };
 }
 
-export default Http;
+export default HTTPTransport;

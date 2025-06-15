@@ -5,7 +5,7 @@ const tpl = `
     type="{{type}}"
     name="{{name}}"
     placeholder="{{placeholder}}"
-    required="{{required}}"
+{{#if required}}required{{/if}}
     data-validator="{{validator}}"
     accept="{{accept}}"
   >
