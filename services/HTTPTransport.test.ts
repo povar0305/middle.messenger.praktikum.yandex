@@ -6,7 +6,6 @@ describe('HTTPTransport', () => {
   beforeEach(() => {
     http = new HTTPTransport();
 
-    // Мокаем глобальный XMLHttpRequest
     (global as any).XMLHttpRequest = jest.fn(() => {
       const xhrMock = {
         open: jest.fn(),
