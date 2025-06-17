@@ -22,7 +22,8 @@
     "start": "vite build && vite preview --port 3000 --host",
     "lint": "eslint **/*.{ts,js} && stylelint src/style/**.scss",
     "test": "jest",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint-staged": "lint-staged"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -40,6 +41,7 @@
     "husky": "^9.1.7",
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",
+    "lint-staged": "^15.5.2",
     "mocha": "^11.6.0",
     "postcss": "^8.5.3",
     "sass": "^1.86.3",
@@ -56,5 +58,8 @@
     "typescript-eslint": "^8.29.1",
     "uuid": "^11.1.0",
     "vite-plugin-handlebars": "1.0.3"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --fix"
   }
 }
