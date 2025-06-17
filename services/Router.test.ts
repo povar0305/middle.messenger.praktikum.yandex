@@ -14,7 +14,6 @@ describe('Route', () => {
   });
 
   const mockDestroy = jest.fn();
-  // Создаем мок класса Block
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   (Block as jest.Mock).mockImplementation(() => {
