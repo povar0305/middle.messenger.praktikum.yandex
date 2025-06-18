@@ -1,4 +1,3 @@
-// Route.ts
 import Block from './Block';
 
 function isEqual(lhs: string, rhs: string): boolean {
@@ -32,10 +31,6 @@ class Route {
   }
 
   private _props: { rootQuery: string };
-
-  get pathname() {
-    return this._pathname;
-  }
 
   public match(pathname: string): boolean {
     return isEqual(pathname, this._pathname);
