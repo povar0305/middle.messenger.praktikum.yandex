@@ -21,9 +21,7 @@
     "serve": "vite preview",
     "start": "vite build && vite preview --port 3000 --host",
     "lint": "eslint **/*.{ts,js} && stylelint src/style/**.scss",
-    "test": "jest",
-    "prepare": "husky install",
-    "lint-staged": "lint-staged"
+    "test": "jest"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -38,7 +36,6 @@
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.31.0",
-    "husky": "^9.1.7",
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",
     "lint-staged": "^15.5.2",
@@ -50,7 +47,8 @@
     "stylelint-scss": "^6.12.0",
     "ts-jest": "^29.4.0",
     "typescript": "~5.7.2",
-    "vite": "6.2.5"
+    "vite": "6.2.5",
+    "xhr-mock": "^2.5.1"
   },
   "dependencies": {
     "globals": "^16.0.0",
