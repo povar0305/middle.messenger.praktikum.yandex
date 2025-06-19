@@ -20,7 +20,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "start": "vite build && vite preview --port 3000 --host",
-    "lint": "eslint **/*.{ts,js} && stylelint src/style/**.scss",
+    "lint": "eslint **/*.ts && stylelint src/style/**.scss",
     "test": "jest",
     "prepare": "husky"
   },
@@ -49,7 +49,7 @@
     "stylelint-scss": "^6.12.0",
     "ts-jest": "^29.4.0",
     "typescript": "~5.7.2",
-    "vite": "6.2.5",
+    "vite": "6.3.4",
     "xhr-mock": "^2.5.1"
   },
   "dependencies": {
@@ -60,6 +60,7 @@
     "vite-plugin-handlebars": "1.0.3"
   },
   "lint-staged": {
-    "*.ts": "eslint --fix"
+    "*.ts": "eslint --fix",
+    "*.{css, scss}": "stylelint src/style/**.scss"
   }
 }
