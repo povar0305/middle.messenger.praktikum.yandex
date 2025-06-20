@@ -70,7 +70,7 @@ class Store {
 
   public storeDidMount() {}
 
-  private _callbackWrapper = (...args: unknown[]) => {
+  _callbackWrapper = (...args: unknown[]) => {
     let oldState: TState | undefined;
     let newState: TState | undefined;
 
